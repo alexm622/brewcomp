@@ -8,10 +8,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class LandingController {
 
-	@GetMapping("/greeting")
-	public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-		model.addAttribute("name", name);
-		return "greeting";
+	// redirect to landing page
+	@GetMapping("/")
+	public String landing() {
+		return "landing";
 	}
+
+	//landing page
+	@GetMapping("/landing")
+	public String landing(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+		model.addAttribute("name", name);
+		return "landing";
+	}
+
 
 }
