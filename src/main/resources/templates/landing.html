@@ -1,14 +1,11 @@
-<!-- FILEPATH: /home/alex/git/brewcomp/src/main/resources/templates/index.html -->
+<!--/*FILEPATH: /home/alex/git/brewcomp/src/main/resources/templates/index.html */-->
 
 <!DOCTYPE html>
 <html xml:lang>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Welcome to My Website</title>
+  <th:block th:replace="~{fragments/header :: header}" />
 </head>
   <body>
-    
+    <th:block th:replace="~{fragments/navbar :: navbar}" />
   </body>
 </html>

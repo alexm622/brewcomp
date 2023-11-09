@@ -1,0 +1,26 @@
+<!--/*FILEPATH: /home/alex/git/brewcomp/src/main/resources/templates/fragments/header.html */-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xml:lang>
+<head>
+    
+    <th:block th:fragment="header">
+        <title>My Website</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <!--/*Include the meta fragment */-->
+        <th:block th:replace="~{fragments/meta :: meta}" />
+        
+        <!--/*Include the includes fragment */-->
+        <th:block th:replace="~{fragments/includes :: includes}" />
+    </th:block>
+    
+</head>
+<body>
+    <!--/*Your header content goes here */-->
+</body>
+</html>
+<!--/*FILEPATH: /home/alex/git/brewcomp/src/main/resources/templates/fragments/meta.html */-->
+
+
