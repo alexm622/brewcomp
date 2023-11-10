@@ -1,11 +1,13 @@
-package com.brewcompanion.brewcomp;
+package com.brewcompanion.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping(value = {""})
 public class LandingController {
 
 	// redirect to landing page
@@ -14,10 +16,9 @@ public class LandingController {
 		return "landing";
 	}
 
-	//landing page
+	//landing.html page
 	@GetMapping("/landing")
-	public String landing(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-		model.addAttribute("name", name);
+	public String landing(@RequestParam(name="page", required=false, defaultValue="1") Integer page, Model model) {
 		return "landing";
 	}
 
