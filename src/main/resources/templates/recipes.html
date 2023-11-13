@@ -8,9 +8,17 @@
     <title>My Website</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--/*JQuery */-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <!--/*PopperJS */-->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+
     <!--/*Bootstrap */-->
-    <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js "></script>
-    <link href=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css " rel="stylesheet">
+    <script src=" https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js "></script>
+
+    <!--/*Bootstrap Icons*/-->
+    <link href=" https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.min.css " rel="stylesheet">
 
     <!--/*Bootswatch */-->
     <link href=" https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cerulean/bootstrap.min.css " rel="stylesheet">
@@ -21,8 +29,6 @@
     <!--/*Underscore.js */-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js"></script>
 
-    <!--/*JQuery */-->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 
     <!--/*JQuery UI */-->
     <script src=" https://cdn.jsdelivr.net/npm/jqueryui@1.11.1/jquery-ui.min.js "></script>
@@ -32,38 +38,39 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card-deck">
-                    <div th:each="recipe : ${recipes}">
-                        <div th:replace="fragments/card :: recipe-card(recipe=${recipe})">
-                            <div class="card border-primary mb-3" style="max-width: 20rem;"
+
+    <div class="container py-4">
+        <table class="mx-auto">
+            <tbody>
+                <tr th:each="recipes : ${recipetable}">
+                    <td th:each="recipe : ${recipes}">
+                        <div th:replace="~{fragments/card :: recipe-card(recipe=${recipe})}">
+                            <div class="card border-primary mb-2" style="width: 20rem;"
                                 th:fragment="recipe-card(recipe)">
                                 <div class="card-header">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h4 class="card-title">
                                             <th:block th:text="${recipe.name}">Recipe name</th:block>
                                         </h4>
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <span class="navbar-toggler-icon"></span>
+                                        <div class="dropdown show">
+                                            <button class="btn dropdown-toggle dropdown-toggle-no-arrow" type="button"
+                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                <i class="bi bi-three-dots"></i>
                                             </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <li><a class="dropdown-item" href="#">Save</a></li>
-                                                <li><a class="dropdown-item" href="#">Share</a></li>
-                                                <li><a class="dropdown-item" href="#">Hide</a></li>
-                                                <li><a class="dropdown-item" href="#">Report</a></li>
-                                            </ul>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="#">Action</a>
+                                                <a class="dropdown-item" href="#">Another action</a>
+                                                <a class="dropdown-item" href="#">Something else here</a>
+                                            </div>
                                         </div>
                                     </div>
-                                    <h6 class="card-subtitle mb-2 text-muted" th:text="{recipe.creator}">Recipe Creator
+                                    <h6 class="card-subtitle mb-2 text-muted" th:text="{recipe.creator}">
+                                        Recipe Creator
                                     </h6>
                                     <h6 th:if="${recipe.oid} != -1">
                                         <a th:href="/recipes/${recipe.orid}"
                                             th:text="${recipe.orid-name} &rarr;">Original Recipe &rarr;</a>
-                                        </form>
                                     </h6>
                                 </div>
                                 <div class="card-body">
@@ -72,10 +79,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 </body>
