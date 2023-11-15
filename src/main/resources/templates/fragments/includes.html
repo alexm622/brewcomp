@@ -3,12 +3,12 @@
 
 <head>
 
-    <th:block th:fragment="includes" />
+    <th:block th:fragment="includes">
     <title>My Website</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!--/*JQuery */-->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" ></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
     <!--/*PopperJS */-->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
@@ -20,7 +20,11 @@
     <link href=" https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.min.css " rel="stylesheet">
 
     <!--/*Bootswatch */-->
-    <link href=" https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cerulean/bootstrap.min.css " rel="stylesheet">
+    <!--/*Bootswatch Flatly*/-->
+    <link id="flatly-theme" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/flatly/bootstrap.min.css" rel="stylesheet">
+
+    <!--/*Bootswatch Darkly*/-->
+    <link id="darkly-theme" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/darkly/bootstrap.min.css" rel="stylesheet" disabled>
 
     <!--/*Backbone.js */-->
     <script src="https://cdn.jsdelivr.net/npm/backbone@1.5.0/backbone-min.min.js"></script>
@@ -37,34 +41,5 @@
 </head>
 
 <body>
-    <div class="card border-primary mb-3" style="width: 20rem;">
-        <div class="card-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="card-title">
-                    <th:block th:text="${recipe.name}">Recipe name</th:block>
-                </h4>
-                <div class="dropdown show">
-                    <button class="btn dropdown-toggle dropdown-toggle-no-arrow" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="bi bi-three-dots"></i>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
-            </div>
-            <h6 class="card-subtitle mb-2 text-muted" th:text="${recipe.author}">Recipe Creator</h6>
-            <h6 th:if="${recipe.parentID} != -1">
-                <a th:href="@{/recipes/{pid} (pid=${recipe.parentID})}"
-                    th:text="${recipe.parentName} + ' &rarr;'">Original Recipe &rarr;</a>
-                </form>
-            </h6>
-        </div>
-        <div class="card-body">
-            <p class="card-text" th:text="${recipe.description}">recipe desc</p>
-            <a th:href="@{/recipes/{rid}(pid=${recipe.id})}" class=" card-link">full recipe &rarr;</a>
-        </div>
-    </div>
+    
 </body>

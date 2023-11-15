@@ -1,22 +1,126 @@
 <!--/* FILEPATH: /home/alex/git/brewcomp/src/main/resources/templates/fragments/navbar.html */-->
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="navbar">
-    <a class="navbar-brand" href="#">My Website</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
-        </li>
-      </ul>
+
+<!--/*FILEPATH: /home/alex/git/brewcomp/src/main/resources/templates/fragments/header.html */-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xml:lang>
+
+<head>
+
+  <title>My Website</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--/*JQuery */-->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+  <!--/*PopperJS */-->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+
+  <!--/*Bootstrap */-->
+  <script src=" https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js "></script>
+
+  <!--/*Bootstrap Icons*/-->
+  <link href=" https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.min.css " rel="stylesheet">
+
+  <!--/*Bootswatch Flatly*/-->
+  <link id="flatly-theme" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/flatly/bootstrap.min.css" rel="stylesheet">
+
+  <!--/*Bootswatch Darkly*/-->
+  <link id="darkly-theme" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/darkly/bootstrap.min.css" rel="stylesheet" disabled>
+
+  <!--/*Backbone.js */-->
+  <script src="https://cdn.jsdelivr.net/npm/backbone@1.5.0/backbone-min.min.js"></script>
+
+  <!--/*Underscore.js */-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js"></script>
+
+
+  <!--/*JQuery UI */-->
+  <script src=" https://cdn.jsdelivr.net/npm/jqueryui@1.11.1/jquery-ui.min.js "></script>
+  <link href=" https://cdn.jsdelivr.net/npm/jqueryui@1.11.1/jquery-ui.min.css " rel="stylesheet">
+
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="navbar">
+    <script>
+      //if darkswitch is checked, change the theme to dark
+      $(document).ready(function () {
+        $('#darkSwitch').click(function () {
+          if ($(this).is(':checked')) {
+            $('#flatly-theme').attr('disabled', true);
+            $('#darkly-theme').attr('disabled', false);
+          } else {
+            $('#flatly-theme').attr('disabled', false);
+            $('#darkly-theme').attr('disabled', true);
+          }
+        });
+      });
+
+      //if i hit enter in the search bar, submit the form
+      $(document).ready(function () {
+        $('#search').keypress(function (e) {
+          if (e.keyCode == 13) {
+            $('#searchForm').submit();
+          }
+        });
+      });
+
+    </script>
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">My Website</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Recipes
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Recipe 1</a>
+              <a class="dropdown-item" href="#">Recipe 2</a>
+              <a class="dropdown-item" href="#">Recipe 3</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">All Recipes</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Users</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="bi bi-person-circle"></i> My Account
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="bi bi-box-arrow-in-right"></i> Login/Logout
+            </a>
+          </li>
+          <li class="nav-item d-flex align-items-center">
+            <div class="form-check form-switch float-right">
+              <input class="form-check-input" type="checkbox" id="darkSwitch">
+              <label class="form-check-label" for="darkSwitch">Dark Mode</label>
+            </div>
+          </li>
+        </ul>
+        <form class="d-flex ml-auto">
+          <input class="form-control me-sm-2" type="search" placeholder="Search">
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
     </div>
   </nav>
-  
+
+</body>
+
+</html>
