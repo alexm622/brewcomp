@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### mysql ###
+mysql_data/
+
+### redis ###
+redis_data/
+
+### minio ###
+minio_data/
