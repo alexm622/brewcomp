@@ -1,4 +1,4 @@
-package com.brewcompanion.controllers;
+package com.brewcompanion.brewcomp.controllers;
 
 import java.util.ArrayList;
 import java.util.List;

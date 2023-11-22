@@ -17,7 +17,7 @@ services:
       - '6379'
     volumes:
       - './redis_data:/data'
-  x-minio-common: &minio-common 
+  minio: &minio-common 
     image: quay.io/minio/minio:RELEASE.2023-11-15T20-43-25Z
     command: server --console-address ":9001" /data
     expose:
@@ -27,7 +27,7 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     volumes:
-    - './minio_data:/data'
+      - './minio_data:/data'
     healthcheck:
       test: [ "CMD", "mc", "ready", "local" ]
       interval: 5s

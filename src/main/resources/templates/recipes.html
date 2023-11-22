@@ -1,10 +1,9 @@
-<!--/*FILEPATH: /home/alex/git/brewcomp/src/main/resources/templates/fragments/header.html */-->
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xml:lang>
 
 <head>
-    <th:block th:replace="~{fragments/header :: header}" />
+    <th:block th:replace="~{fragments/essentials/header :: header}" />
     <title>My Website</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -38,14 +37,52 @@
 </head>
 
 <body>
-
+    
     <div class="container py-4">
+        <script>
+            $(document).ready(function () {
+                $('.bi-heart').hover(function () {
+                    $(this).removeClass('bi-heart').addClass('bi-heart-fill');
+                }, function () {
+                    $(this).removeClass('bi-heart-fill').addClass('bi-heart');
+                });
+            });
+    
+            //do the same for the comment icon
+    
+            $(document).ready(function () {
+                $('.bi-chat-dots').hover(function () {
+                    $(this).removeClass('bi-chat-dots').addClass('bi-chat-dots-fill');
+                }, function () {
+                    $(this).removeClass('bi-chat-dots-fill').addClass('bi-chat-dots');
+                });
+            });
+    
+            //when save-bar is hovered over, change the icon to a filled bookmark
+            $(document).ready(function () {
+                $('.save-bar').hover(function () {
+                    $(this).children().removeClass('bi-bookmark').addClass('bi-bookmark-fill');
+                }, function () {
+                    $(this).children().removeClass('bi-bookmark-fill').addClass('bi-bookmark');
+                });
+            });
+    
+            //do the same for the report icon
+            $(document).ready(function () {
+                $('.report-bar').hover(function () {
+                    $(this).children().removeClass('bi-flag').addClass('bi-flag-fill');
+                }, function () {
+                    $(this).children().removeClass('bi-flag-fill').addClass('bi-flag');
+                });
+            });
+    
+        </script>
         <table class="mx-auto">
             <tbody>
                 <tr th:each="recipes : ${recipetable}">
                     <td th:each="recipe : ${recipes}">
-                        <div th:replace="~{fragments/card :: recipe-card(recipe=${recipe})}">
-                            <div class="card border-primary mb-2" style="width: 20rem;"
+                        <div th:replace="~{fragments/recipes/card :: recipe-card(recipe=${recipe})}">
+                            <div class="card border-primary mb-3" style="width: 20rem;"
                                 th:fragment="recipe-card(recipe)">
                                 <div class="card-header">
                                     <div class="d-flex justify-content-between align-items-center">
@@ -53,29 +90,41 @@
                                             <th:block th:text="${recipe.name}">Recipe name</th:block>
                                         </h4>
                                         <div class="dropdown show">
-                                            <button class="btn dropdown-toggle dropdown-toggle-no-arrow" type="button"
+                                            <button class="btn dropdown-toggle-no-arrow" type="button"
                                                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                                 aria-expanded="false">
                                                 <i class="bi bi-three-dots"></i>
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#">Something else here</a>
+                                                <a class="dropdown-item save-bar" href="#">Save
+                                                    <i class="bi bi-bookmark"></i>
+                                                </a>
+                                                <a class="dropdown-item report-bar" href="#">Report
+                                                    <i style="color:#FF474C; opacity: 25;" class="bi bi-flag"></i>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <h6 class="card-subtitle mb-2 text-muted" th:text="{recipe.creator}">
-                                        Recipe Creator
+                                    <h6 class="card-subtitle mb-2 text-muted" th:text="${recipe.author}">Recipe Creator
                                     </h6>
-                                    <h6 th:if="${recipe.oid} != -1">
-                                        <a th:href="/recipes/${recipe.orid}"
-                                            th:text="${recipe.orid-name} &rarr;">Original Recipe &rarr;</a>
+                                    <h6 th:if="${recipe.parentID} != -1" style="position: relative;">
+                                        <a href="#" th:href="@{/recipes/{pid} (pid=${recipe.parentID})}"
+                                            th:text="${recipe.parentName} + ' &rarr;'"
+                                            class="link-opacity-100 card-link">Original
+                                            Recipe &rarr;</a>
                                     </h6>
+
                                 </div>
                                 <div class="card-body">
-                                    <p class="card-text" th:text="${recipe.desc}">recipe desc</p>
-                                    <a th:href="/recipes/${recipe.rid}" class=" card-link">full recipe &rarr;</a>
+                                    <p class="card-text" th:text="${recipe.description}">recipe desc</p>
+                                    <a href="#" th:href="@{/recipes/{rid}(pid=${recipe.id})}" class=" card-link">full
+                                        recipe
+                                        &rarr;</a>
+                                </div>
+                                <div class="card-footer text-right">
+                                    <span class="mr-2"><a href="#"><i class="bi bi-heart" style="color:#FF474C"></i></a>
+                                        10 likes</span>
+                                    <span><i class="bi bi-chat-dots"></i> <a href="#">5 comments &rarr;</a></span>
                                 </div>
                             </div>
                         </div>
@@ -88,4 +137,3 @@
 </body>
 
 </html>
-<!--/*FILEPATH: /home/alex/git/brewcomp/src/main/resources/templates/fragments/meta.html */-->
