@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.brewcompanion.brewcomp.utils.Config;
+import com.brewcompanion.brewcomp.utils.Minio;
 import com.brewcompanion.brewcomp.utils.MySql;
 
 import lombok.Getter;
@@ -54,10 +55,15 @@ public class Main {
 		}
 		logger.info("Config file read.");
 
-		// print initializing to log4j
+		// intialize mysql
 		logger.info("Initializing MySql...");
 		MySql.initialize();
 		logger.info("MySql initialized.");
+
+		//initialize minio
+		logger.info("Initializing Minio...");
+		Minio.initialize();
+		logger.info("Minio initialized.");
 	}
 
 }

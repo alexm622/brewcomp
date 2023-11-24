@@ -3,7 +3,6 @@ package com.brewcompanion.brewcomp.objects;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Recipe implements Serializable{
