@@ -1,0 +1,9 @@
+{
+    "mysqlUrl": "jdbc:mysql://172.20.0.2:3306/brewcomp",
+    "redisUrl": "redis://172.20.0.3:6379",
+    "minioUrl": "http://172.20.0.4:9000",
+    "mysqlDbName": "brewcomp",
+    "mysqlMaxPoolSize": 10,
+    "minioQrCodeBucketName": "brewcomp-qrcodes",
+    "minioLabelBucketName": "brewcomp-labels"
+}

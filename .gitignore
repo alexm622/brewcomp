@@ -40,3 +40,7 @@ redis_data/
 
 ### minio ###
 minio_data/
+
+### secrets ###
+secrets.csv
+

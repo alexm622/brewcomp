@@ -3,7 +3,7 @@ services:
   mysql:
     image: 'mysql:latest'
     environment:
-      - 'MYSQL_DATABASE=mydatabase'
+      - 'MYSQL_DATABASE=brewcomp'
       - 'MYSQL_PASSWORD=secret'
       - 'MYSQL_ROOT_PASSWORD=verysecret'
       - 'MYSQL_USER=myuser'
@@ -11,12 +11,20 @@ services:
       - '3306'
     volumes:
       - './mysql_data:/var/lib/mysql'
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.2
+
   redis:
     image: 'redis:latest'
     ports:
       - '6379'
     volumes:
       - './redis_data:/data'
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.3
+
   minio: &minio-common 
     image: quay.io/minio/minio:RELEASE.2023-11-15T20-43-25Z
     command: server --console-address ":9001" /data
@@ -33,3 +41,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.4
+
+networks:
+  mynetwork:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

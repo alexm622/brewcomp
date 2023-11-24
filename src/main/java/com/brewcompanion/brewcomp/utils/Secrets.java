@@ -5,15 +5,21 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.brewcompanion.brewcomp.Main;
+
 public class Secrets {
     private static final String SECRETS_FILE_PATH = "./secrets.csv";
     private static Map<String, String> secrets;
 
+    private Secrets() {
+        // private constructor to hide the implicit public one
+    }
+
     static {
-        System.out.println("Reading secrets file...");
+        Main.getLogger().info("Reading secrets file...");
         secrets = new HashMap<>();
         loadSecrets();
-        System.out.println("Secrets file read.");
+        Main.getLogger().info("Secrets file read.");
     }
 
     private static void loadSecrets() {
@@ -28,7 +34,7 @@ public class Secrets {
                 }
             }
         } catch (IOException e) {
-            System.err.println("Failed to read secrets file.");
+            Main.getLogger().error("Failed to read secrets file.");
             e.printStackTrace();
         }
     }

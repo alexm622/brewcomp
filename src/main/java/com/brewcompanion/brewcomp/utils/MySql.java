@@ -1,5 +1,6 @@
 package com.brewcompanion.brewcomp.utils;
 
+import com.brewcompanion.brewcomp.Main;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -12,10 +13,13 @@ public class MySql {
 
     public static void initialize() {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(Secrets.getSecret("jdbcUrl"));
-        config.setUsername(Secrets.getSecret("username"));
-        config.setPassword(Secrets.getSecret("password"));
-        config.setMaximumPoolSize(Integer.parseInt(Secrets.getSecret("maximumPoolSize")));
+        config.setUsername(Secrets.getSecret("MYSQL_USER"));
+        config.setPassword(Secrets.getSecret("MYSQL_PASSWORD"));
+
+        config.setJdbcUrl(Main.getConfig().getMysqlUrl());
+        config.setMaximumPoolSize(Main.getConfig().getMysqlMaxPoolSize());
+        
+        //set database name
 
         dataSource = new HikariDataSource(config);
     }
