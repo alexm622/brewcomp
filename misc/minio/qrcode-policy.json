@@ -10,7 +10,7 @@
                 "s3:GetObject"
             ],
             "Resource": [
-                "arn:aws:s3:::chum/*"
+                "arn:aws:s3:::brewcomp-qrcodes/*"
             ]
         },
         {
@@ -24,7 +24,7 @@
                 "s3:DeleteObject"
             ],
             "Resource": [
-                "arn:aws:s3:::chum/*"
+                "arn:aws:s3:::brewcomp-qrcodes/*"
             ]
         }
     ]

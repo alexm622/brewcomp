@@ -1,10 +1,16 @@
-package com.brewcompanion.brewcomp.utils;
+package com.brewcompanion.brewcomp.utils.minio;
+
+import java.io.InputStream;
+import java.util.Arrays;
 
 import com.brewcompanion.brewcomp.Main;
+import com.brewcompanion.brewcomp.utils.Secrets;
+import com.google.common.base.Optional;
 
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import io.minio.SetBucketPolicyArgs;
 import lombok.Getter;
 
@@ -61,7 +67,7 @@ public class Minio {
                 Main.getLogger().info("Minio bucket exists");
             } else {
                 Main.getLogger().error("Minio bucket does not exist");
-                
+
                 if (!create) {
                     return;
                 }
@@ -82,6 +88,80 @@ public class Minio {
             e.printStackTrace();
             Main.getLogger().error("Minio bucket does not exist");
         }
+    }
+
+    public static void uploadImage(InputStream imageData, long size, String fileName, String bucketName, String path) {
+        if (minioClient == null) {
+            Main.getLogger().error("Minio client is null");
+            return;
+        }
+
+        if (imageData == null) {
+            Main.getLogger().error("Image data is null");
+            return;
+        }
+
+        if (fileName == null) {
+            Main.getLogger().error("File name is null");
+            return;
+        }
+
+        if (fileName.isEmpty()) {
+            Main.getLogger().error("File name is empty");
+            return;
+        }
+
+        if (bucketName == null) {
+            Main.getLogger().error("Bucket name is null");
+            return;
+        }
+
+        if (bucketName.isEmpty()) {
+            Main.getLogger().error("Bucket name is empty");
+            return;
+        }
+
+        try {
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(path + "/" + fileName)
+                    .stream(imageData, size, -1)
+                    .build());
+            Main.getLogger().info("Image uploaded to Minio");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Main.getLogger().error("Failed to upload image to Minio");
+        }
+    }
+
+    public static void uploadImage(InputStream imageData, long size, String fileName, Buckets bucket) {
+        if (minioClient == null) {
+            Main.getLogger().error("Minio client is null");
+            return;
+        }
+
+        if (imageData == null) {
+            Main.getLogger().error("Image data is null");
+            return;
+        }
+
+        if (fileName == null) {
+            Main.getLogger().error("File name is null");
+            return;
+        }
+
+        if (fileName.isEmpty()) {
+            Main.getLogger().error("File name is empty");
+            return;
+        }
+
+        if (bucket == null) {
+            Main.getLogger().error("Bucket is null");
+            return;
+        }
+
+        uploadImage(imageData, size, fileName, bucket.getBucketName(), "/");
     }
 
 }

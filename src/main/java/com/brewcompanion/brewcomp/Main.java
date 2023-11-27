@@ -6,8 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.brewcompanion.brewcomp.utils.Config;
-import com.brewcompanion.brewcomp.utils.Minio;
 import com.brewcompanion.brewcomp.utils.MySql;
+import com.brewcompanion.brewcomp.utils.minio.Minio;
 
 import lombok.Getter;
 
@@ -55,15 +55,23 @@ public class Main {
 		}
 		logger.info("Config file read.");
 
-		// intialize mysql
-		logger.info("Initializing MySql...");
-		MySql.initialize();
-		logger.info("MySql initialized.");
-
+		try {
+			// intialize mysql
+			logger.info("Initializing MySql...");
+			MySql.initialize();
+			logger.info("MySql initialized.");
+		} catch (Exception e) {
+			Main.getLogger().error("Failed to initialize MySql.");
+			e.printStackTrace();
+		}
 		//initialize minio
 		logger.info("Initializing Minio...");
-		Minio.initialize();
-		logger.info("Minio initialized.");
+		try {
+			Minio.initialize();
+			logger.info("Minio initialized.");
+		} catch (Exception e) {
+			Main.getLogger().error("Failed to initialize Minio.");
+			e.printStackTrace();
+		}
 	}
-
 }

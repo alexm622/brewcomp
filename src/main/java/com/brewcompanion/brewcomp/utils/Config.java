@@ -1,5 +1,6 @@
 package com.brewcompanion.brewcomp.utils;
 
+import com.brewcompanion.brewcomp.Main;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,9 +30,34 @@ public class Config {
     private String minioQrCodePolicy;
     private String minioLabelPolicy;
 
-    public static Config loadConfigFromFile(String filePath) throws IOException {
+    private String minioQrCodePolicyJson;
+    private String minioLabelPolicyJson;
+
+    public static Config loadConfigFromFile(String filePath) {
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(new File(filePath), Config.class);
+        Config config = null;
+        try {
+            config = objectMapper.readValue(new File(filePath), Config.class);
+        } catch (IOException e) {
+            Main.getLogger().error("Failed to load config from file: {}", e.getMessage());
+            System.exit(1);
+        }
+
+        try {
+            File f = new File(config.getMinioQrCodePolicy());
+            config.setMinioQrCodePolicyJson(objectMapper.readTree(f).toString());
+        } catch (IOException e) {
+            Main.getLogger().error("Failed to read Minio QR code policy file: {}", e.getMessage());
+        }
+
+        try {
+            File f = new File(config.getMinioLabelPolicy());
+            config.setMinioLabelPolicyJson(objectMapper.readTree(f).toString());
+        } catch (IOException e) {
+            Main.getLogger().error("Failed to read Minio label policy file: {}", e.getMessage());
+        }
+
+        return config;
     }
 
     public static void generateConfigFile(String filePath) throws IOException {
@@ -51,8 +77,86 @@ public class Config {
         config.setMinioQrCodeBucketName("brewcomp-qrcodes");
         config.setMinioLabelBucketName("brewcomp-labels");
 
-        config.setMinioQrCodePolicy("{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucket\"],\"Resource\":[\"arn:aws:s3:::brewcomp-qrcodes\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::brewcomp-qrcodes/*\"]}]}");
-        config.setMinioLabelPolicy("{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucket\"],\"Resource\":[\"arn:aws:s3:::brewcomp-labels\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::brewcomp-labels/*\"]}]}");
+        config.setMinioQrCodePolicy("./misc/minio/qrcode-policy.json");
+        config.setMinioLabelPolicy("./misc/minio/label-policy.json");
+
+        config.setMinioQrCodePolicyJson("{\n" +
+                "    \"Version\": \"2012-10-17\",\n" +
+                "    \"Statement\": [\n" +
+                "        {\n" +
+                "            \"Sid\": \"\",\n" +
+                "            \"Effect\": \"Allow\",\n" +
+                "            \"Principal\": {\n" +
+                "                \"AWS\": [\n" +
+                "                    \"*\"\n" +
+                "                ]\n" +
+                "            },\n" +
+                "            \"Action\": [\n" +
+                "                \"s3:GetBucketLocation\",\n" +
+                "                \"s3:ListBucket\"\n" +
+                "            ],\n" +
+                "            \"Resource\": [\n" +
+                "                \"arn:aws:s3:::brewcomp-qrcodes\"\n" +
+                "            ]\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"Sid\": \"\",\n" +
+                "            \"Effect\": \"Allow\",\n" +
+                "            \"Principal\": {\n" +
+                "                \"AWS\": [\n" +
+                "                    \"*\"\n" +
+                "                ]\n" +
+                "            },\n" +
+                "            \"Action\": [\n" +
+                "                \"s3:GetObject\",\n" +
+                "                \"s3:PutObject\",\n" +
+                "                \"s3:DeleteObject\"\n" +
+                "            ],\n" +
+                "            \"Resource\": [\n" +
+                "                \"arn:aws:s3:::brewcomp-qrcodes/*\"\n" +
+                "            ]\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}");
+        
+                        config.setMinioLabelPolicyJson("{\n" +
+                "    \"Version\": \"2012-10-17\",\n" +
+                "    \"Statement\": [\n" +
+                "        {\n" +
+                "            \"Sid\": \"\",\n" +
+                "            \"Effect\": \"Allow\",\n" +
+                "            \"Principal\": {\n" +
+                "                \"AWS\": [\n" +
+                "                    \"*\"\n" +
+                "                ]\n" +
+                "            },\n" +
+                "            \"Action\": [\n" +
+                "                \"s3:GetBucketLocation\",\n" +
+                "                \"s3:ListBucket\"\n" +
+                "            ],\n" +
+                "            \"Resource\": [\n" +
+                "                \"arn:aws:s3:::brewcomp-labels\"\n" +
+                "            ]\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"Sid\": \"\",\n" +
+                "            \"Effect\": \"Allow\",\n" +
+                "            \"Principal\": {\n" +
+                "                \"AWS\": [\n" +
+                "                    \"*\"\n" +
+                "                ]\n" +
+                "            },\n" +
+                "            \"Action\": [\n" +
+                "                \"s3:GetObject\",\n" +
+                "                \"s3:PutObject\",\n" +
+                "                \"s3:DeleteObject\"\n" +
+                "            ],\n" +
+                "            \"Resource\": [\n" +
+                "                \"arn:aws:s3:::brewcomp-labels/*\"\n" +
+                "            ]\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}");
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.writeValue(new File(filePath), config);

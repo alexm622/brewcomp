@@ -6,6 +6,6 @@
     "mysqlMaxPoolSize": 10,
     "minioQrCodeBucketName": "brewcomp-qrcodes",
     "minioLabelBucketName": "brewcomp-labels",
-    "minioQrCodePolicy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucket\"],\"Resource\":[\"arn:aws:s3:::brewcomp-qrcodes\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::brewcomp-qrcodes/*\"]}]}",
-    "minioLabelPolicy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucket\"],\"Resource\":[\"arn:aws:s3:::brewcomp-labels\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::brewcomp-labels/*\"]}]}"
+    "minioQrCodePolicy": "./misc/minio/qrcode-policy.json",
+    "minioLabelPolicy": "./misc/minio/label-policy.json"
 }
