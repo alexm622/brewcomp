@@ -56,15 +56,22 @@
 
         function getRandomImage(width, height) {
             var image = document.createElement("img");
-            image.src = "https://picsum.photos/" + width * 100 + "/" + height * 100;
+            image.src = "https://picsum.photos/" + width * 100 + "/" + height * 100 + "?t=" + Math.random();
             return image;
         }
+
+        var ratioX = 4;
+        var ratioY = 3;
 
         function updateGrid() {
             var selectedTemplate = document.getElementById("labelDimensionsDropdown").value;
             var selectedDimension = labelDimensions.find(function (dimension) {
                 return dimension.template === selectedTemplate;
             });
+
+            //update ratio
+            ratioX = selectedDimension.width;
+            ratioY = selectedDimension.height;
 
             var gridContainer = document.getElementById("gridContainer");
             gridContainer.innerHTML = "";
@@ -77,14 +84,22 @@
                     var col = document.createElement("div");
                     col.classList.add("col");
                     col.textContent = "Cell " + (i * selectedDimension.width + j + 1);
+                    col.id = "cell" + (i * selectedDimension.width + j + 1);
 
                     var dropdown = document.createElement("select");
                     dropdown.classList.add("imageDropdown");
+
+                    var number = (i * selectedDimension.width + j + 1);
+                    dropdown.addEventListener("change", function () {
+                        console.log("update cell " + number);
+                        updateCell(number);
+                    });
 
                     imageDropdown.forEach(function (image) {
                         var option = document.createElement("option");
                         option.value = image;
                         option.text = image;
+
                         dropdown.appendChild(option);
                     });
 
@@ -93,27 +108,72 @@
                 }
 
                 gridContainer.appendChild(row);
+
             }
         }
 
-        function updatePrintContainer() {
-            var printContainer = document.getElementById("printContainer");
-            printContainer.innerHTML = "";
 
-            var gridCells = document.getElementsByClassName("col");
 
-            for (var i = 0; i < gridCells.length; i++) {
-                var cell = gridCells[i];
-                var image = getRandomImage(selectedDimension.width, selectedDimension.height);
-                cell.innerHTML = "";
-                cell.appendChild(image);
+        function initializeImageDropdowns() {
+            var dropdowns = document.getElementsByClassName("imageDropdown");
+            for (var i = 0; i < dropdowns.length; i++) {
+                var dropdown = dropdowns[i];
+                dropdown.addEventListener("change", function (event) {
+                    var selectedImage = event.target.value;
+                    var image = getRandomImage(4, 3);
+                    event.target.parentElement.appendChild(image);
+                });
             }
         }
-            
+
+        function updateImageGrid() {
+            var selectedTemplate = document.getElementById("labelDimensionsDropdown").value;
+            var selectedDimension = labelDimensions.find(function (dimension) {
+                return dimension.template === selectedTemplate;
+            });
+
+            var imageGridContainer = document.getElementById("imageGridContainer");
+            imageGridContainer.innerHTML = "";
+
+            for (var i = 0; i < selectedDimension.height; i++) {
+                var row = document.createElement("div");
+                row.classList.add("row");
+
+                for (var j = 0; j < selectedDimension.width; j++) {
+                    var col = document.createElement("div");
+                    col.classList.add("col");
+                    col.id = "imageCell" + (i * selectedDimension.width + j + 1);
+
+                    var image = getRandomImage(4, 3);
+                    col.appendChild(image);
+                    row.appendChild(col);
+                }
+
+                imageGridContainer.appendChild(row);
+
+            }
+
+        }
+
+        function updateCell(number) {
+
+            var cellId = "imageCell" + number;
+            var cell = document.getElementById(cellId);
+
+            if (cell == null) {
+                return false;
+            }
+
+            var image = getRandomImage(4, 3);
+            cell.innerHTML = "";
+            cell.appendChild(image);
+
+            return true;
+        }
 
     </script>
 
-    <select id="labelDimensionsDropdown" onchange="updateGrid()">
+    <select id="labelDimensionsDropdown" onchange="updateGrid(); updateImageGrid()">
         <option value="">Select Label Dimension</option>
         <script>
             labelDimensions.forEach(function (dimension) {
@@ -128,14 +188,7 @@
 
     <div id="gridContainer"></div>
 
-    <div id="printContainer"></div>
-
-
-</body>
-
-</html>
-
-
+    <div id="imageGridContainer"></div>
 
 
 </body>
