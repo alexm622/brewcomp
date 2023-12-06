@@ -5,7 +5,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
+import lombok.Data;
+
+@Data
 public class Recipe implements Serializable{
+    private static Random random;
+
     private final String name;
     private final String hash;
     private final String id;
@@ -39,104 +44,7 @@ public class Recipe implements Serializable{
     }
     
 
-    public String getName() {
-        return this.name;
-    }
-
-
-    public String getHash() {
-        return this.hash;
-    }
-
-
-    public String getId() {
-        return this.id;
-    }
-
-
-    public String getAuthor() {
-        return this.author;
-    }
-
-
-    public String getAuthorHash() {
-        return this.authorHash;
-    }
-
-
-    public String getAuthorID() {
-        return this.authorID;
-    }
-
-
-    public String getParentName() {
-        return this.parentName;
-    }
-
-    public void setParentName(String parentName) {
-        this.parentName = parentName;
-    }
-
-    public String getParentHash() {
-        return this.parentHash;
-    }
-
-    public void setParentHash(String parentHash) {
-        this.parentHash = parentHash;
-    }
-
-    public String getParentID() {
-        return this.parentID;
-    }
-
-    public void setParentID(String parentID) {
-        this.parentID = parentID;
-    }
-
-    public String getParentAuthor() {
-        return this.parentAuthor;
-    }
-
-    public void setParentAuthor(String parentAuthor) {
-        this.parentAuthor = parentAuthor;
-    }
-
-    public String getParentAutherHash() {
-        return this.parentAutherHash;
-    }
-
-    public void setParentAutherHash(String parentAutherHash) {
-        this.parentAutherHash = parentAutherHash;
-    }
-
-    public String getParentAuthorID() {
-        return this.parentAuthorID;
-    }
-
-    public void setParentAuthorID(String parentAuthorID) {
-        this.parentAuthorID = parentAuthorID;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-
-    public String getRecipeInstructions() {
-        return this.recipeInstructions;
-    }
-
-    public void setRecipeInstructions(String recipeInstructions) {
-        this.recipeInstructions = recipeInstructions;
-    }
-
-    public String getRecipeType() {
-        return this.recipeType;
-    }
-
-    public void setRecipeType(String recipeType) {
-        this.recipeType = recipeType;
-    }
+    
 
     public static List<Recipe> getExampleData(){
         List<Recipe> exampleData = new ArrayList<>();
@@ -205,7 +113,9 @@ public class Recipe implements Serializable{
     }
     public static List<Recipe> getRandomData(int count) {
             List<Recipe> randomData = new ArrayList<>();
-            Random random = new Random();
+            if(random == null){
+                random = new Random();
+            }
 
             for (int i = 0; i < count; i++) {
                 String name = "Recipe " + (i + 1);

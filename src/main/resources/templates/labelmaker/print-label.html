@@ -46,19 +46,40 @@
             { width: 8, height: 4, template: "8x4.html", name: "8 by 4 labels" },
         ];
 
-        var imageDropdown = [
-            "label-1",
-            "label-2",
-            "label-3",
-            "label-4",
-        ]
+        var imageDropdownData = [
 
+        ]
 
         function getRandomImage(width, height) {
             var image = document.createElement("img");
             image.src = "https://picsum.photos/" + width * 100 + "/" + height * 100 + "?t=" + Math.random();
             return image;
         }
+
+        function populateImageDropdown() {
+            //get request to localhost:8080/api/getAvailableLabels
+            //response is a json list of available labels
+            request = new XMLHttpRequest();
+            request.open('GET', 'http://localhost:8080/api/labels/getAvailableLabels?userToken=0', true);
+            request.onload = function () {
+                // Begin accessing JSON data here
+                var data = JSON.parse(this.response);
+                if (request.status >= 200 && request.status < 400) {
+                    data.forEach(label => {
+                        imageDropdownData.push({ name: label.name, url: label.url });
+                    });
+                } else {
+                    //put an object that says no labels available
+
+                    imageDropdownData.push({ name: "No labels available", url: "" });
+
+                    console.log('error');
+                }
+            }
+            request.send();
+        }
+
+        populateImageDropdown();
 
         var ratioX = 4;
         var ratioY = 3;
@@ -90,15 +111,17 @@
                     dropdown.classList.add("imageDropdown");
 
                     var number = (i * selectedDimension.width + j + 1);
-                    dropdown.addEventListener("change", function () {
-                        console.log("update cell " + number);
-                        updateCell(number);
-                    });
+                    dropdown.addEventListener("change", (function (num) {
+                        return function () {
+                            console.log("update cell " + num);
+                            updateCell(num);
+                        };
+                    })(number));
 
-                    imageDropdown.forEach(function (image) {
+                    imageDropdownData.forEach(function (image) {
                         var option = document.createElement("option");
-                        option.value = image;
-                        option.text = image;
+                        option.value = image.url;
+                        option.text = image.name;
 
                         dropdown.appendChild(option);
                     });
@@ -119,9 +142,8 @@
             for (var i = 0; i < dropdowns.length; i++) {
                 var dropdown = dropdowns[i];
                 dropdown.addEventListener("change", function (event) {
-                    var selectedImage = event.target.value;
-                    var image = getRandomImage(4, 3);
-                    event.target.parentElement.appendChild(image);
+                    console.log("update cell " + event.target.id);
+                    updateCell(event.target.id);
                 });
             }
         }
@@ -164,11 +186,27 @@
                 return false;
             }
 
-            var image = getRandomImage(4, 3);
-            cell.innerHTML = "";
-            cell.appendChild(image);
+            //get the url of the image
+            var dropdownId = "cell" + number;
+            var dropdown = document.getElementById(dropdownId);
+            var selectedImage = dropdown.value;
 
-            return true;
+            //if the url is empty remove the image, if it is random, get a random image, otherwise use the url
+            if (selectedImage == "") {
+                cell.innerHTML = "";
+                return true;
+            } else if (selectedImage == "random") {
+                var image = getRandomImage(ratioX, ratioY);
+                cell.innerHTML = "";
+                cell.appendChild(image);
+                return true;
+            } else {
+                var image = document.createElement("img");
+                image.src = selectedImage;
+                cell.innerHTML = "";
+                cell.appendChild(image);
+                return true;
+            }
         }
 
     </script>

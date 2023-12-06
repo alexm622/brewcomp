@@ -1,17 +1,25 @@
 package com.brewcompanion.brewcomp.utils.minio;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import com.brewcompanion.brewcomp.Main;
+import com.brewcompanion.brewcomp.objects.Label;
 import com.brewcompanion.brewcomp.utils.Secrets;
-import com.google.common.base.Optional;
 
 import io.minio.BucketExistsArgs;
+import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.ListObjectsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.Result;
 import io.minio.SetBucketPolicyArgs;
+import io.minio.http.Method;
+import io.minio.messages.Item;
 import lombok.Getter;
 
 /**
@@ -162,6 +170,55 @@ public class Minio {
         }
 
         uploadImage(imageData, size, fileName, bucket.getBucketName(), "/");
+    }
+
+    public static Optional<Label[]> getLabels(String token) {
+        if (minioClient == null) {
+            Main.getLogger().error("Minio client is null");
+            return Optional.empty();
+        }
+
+        if (token == null) {
+            Main.getLogger().error("Token is null");
+            return Optional.empty();
+        }
+
+        if (token.isEmpty()) {
+            Main.getLogger().error("Token is empty");
+            return Optional.empty();
+        }
+
+        try {
+            List<Result<Item>> items = new ArrayList<>();
+            minioClient.listObjects(ListObjectsArgs.builder()
+                    .bucket(Main.getConfig().getMinioLabelBucketName())
+                    .prefix(token + "/") // Specify the folder path using the token
+                    .build()).forEach(items::add);
+                    
+            // extract the static url from the item
+            String[] urls = new String[items.size()];
+            for (int i = 0; i < items.size(); i++) {
+                urls[i] = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+                        .bucket(Main.getConfig().getMinioLabelBucketName())
+                        .object(items.get(i).get().objectName()).method(Method.GET)
+                        .build());
+            }
+
+            Label[] labels = new Label[urls.length];   
+            for (int i = 0; i < urls.length; i++) {
+                String[] split = urls[i].split("/");
+                String name = split[split.length - 1];
+                //remove everything after the first ?
+                name = name.split("\\?")[0];
+                labels[i] = new Label(name, urls[i]);
+            }
+
+            return Optional.of(labels);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Main.getLogger().error("Failed to get labels from Minio");
+            return Optional.empty();
+        }
     }
 
 }
