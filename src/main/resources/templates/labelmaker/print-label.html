@@ -36,7 +36,10 @@
 </head>
 
 <body>
+    
     <script>
+
+        // Define the label dimensions
         var labelDimensions = [
             { width: 2, height: 1, template: "2x1.html", name: "2 by 1 labels" },
             { width: 2, height: 3, template: "2x3.html", name: "2 by 3 labels" },
@@ -45,20 +48,35 @@
             { width: 5, height: 3, template: "5x3.html", name: "5 by 3 labels" },
             { width: 8, height: 4, template: "8x4.html", name: "8 by 4 labels" },
         ];
+    </script>
 
+    <select id="labelDimensionsDropdown" onchange="updateGrid(); updateImageGrid()" >
+        <option value="">Select Label Dimension</option>
+        <script>
+            // Dynamically populate the label dimensions dropdown
+            labelDimensions.forEach(function (dimension) {
+                var option = document.createElement("option");
+                option.value = dimension.template;
+                option.text = dimension.name;
+                document.getElementById("labelDimensionsDropdown").appendChild(option);
+            });
+
+        </script>
+    </select>
+
+    <div id="gridContainer"></div>
+
+    <div id="imageGridContainer"></div>
+
+    <script>
+
+       
         var imageDropdownData = [
 
         ]
 
-        function getRandomImage(width, height) {
-            var image = document.createElement("img");
-            image.src = "https://picsum.photos/" + width * 100 + "/" + height * 100 + "?t=" + Math.random();
-            return image;
-        }
-
         function populateImageDropdown() {
-            //get request to localhost:8080/api/getAvailableLabels
-            //response is a json list of available labels
+            // Make a GET request to retrieve available labels
             request = new XMLHttpRequest();
             request.open('GET', 'http://localhost:8080/api/labels/getAvailableLabels?userToken=0', true);
             request.onload = function () {
@@ -69,17 +87,31 @@
                         imageDropdownData.push({ name: label.name, url: label.url });
                     });
                 } else {
-                    //put an object that says no labels available
-
+                    // If no labels are available, display a message
                     imageDropdownData.push({ name: "No labels available", url: "" });
 
                     console.log('error');
                 }
             }
             request.send();
-        }
+            // Wait for the request to complete
+            setTimeout(function () {
+                // Populate the dropdowns
+                var dropdowns = document.getElementsByClassName("imageDropdown");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var dropdown = dropdowns[i];
+                    dropdown.innerHTML = "";
+                    imageDropdownData.forEach(function (image) {
+                        var option = document.createElement("option");
+                        option.value = image.url;
+                        option.text = image.name;
 
-        populateImageDropdown();
+                        dropdown.appendChild(option);
+                    });
+                }
+            }, 1000);
+
+        }
 
         var ratioX = 4;
         var ratioY = 3;
@@ -90,7 +122,7 @@
                 return dimension.template === selectedTemplate;
             });
 
-            //update ratio
+            // Update the ratio
             ratioX = selectedDimension.width;
             ratioY = selectedDimension.height;
 
@@ -135,8 +167,6 @@
             }
         }
 
-
-
         function initializeImageDropdowns() {
             var dropdowns = document.getElementsByClassName("imageDropdown");
             for (var i = 0; i < dropdowns.length; i++) {
@@ -164,13 +194,37 @@
                 for (var j = 0; j < selectedDimension.width; j++) {
                     var col = document.createElement("div");
                     col.classList.add("col");
+                    //restrict the size of the image
+                    col.style.maxWidth = "100px";
+                    col.style.maxHeight = "100px";
+
                     col.id = "imageCell" + (i * selectedDimension.width + j + 1);
 
-                    var image = getRandomImage(4, 3);
-                    col.appendChild(image);
+                    var dropdownId = "cell" + (i * selectedDimension.width + j + 1);
+                    var dropdown = document.getElementById(dropdownId).childNodes[1];
+
+                    if (dropdown == null) {
+                        return false;
+                    }
+
+                    var url = dropdown.value;
+
+                    //make an image element and set the source to the url
+
+                    var image = document.createElement("img");
+                    image.src = url;
+                    image.style.maxWidth = "100px";
+                    image.style.maxHeight = "100px";
+
+                    //if there is an existing image, remove it
+                    if (col.childNodes.length > 0) {
+                        col.removeChild(cell.childNodes[0]);
+                    }
+                    col .appendChild(image);
+
+
                     row.appendChild(col);
                 }
-
                 imageGridContainer.appendChild(row);
 
             }
@@ -186,47 +240,37 @@
                 return false;
             }
 
-            //get the url of the image
             var dropdownId = "cell" + number;
-            var dropdown = document.getElementById(dropdownId);
-            var selectedImage = dropdown.value;
+            var dropdown = document.getElementById(dropdownId).childNodes[1];
 
-            //if the url is empty remove the image, if it is random, get a random image, otherwise use the url
-            if (selectedImage == "") {
-                cell.innerHTML = "";
-                return true;
-            } else if (selectedImage == "random") {
-                var image = getRandomImage(ratioX, ratioY);
-                cell.innerHTML = "";
-                cell.appendChild(image);
-                return true;
-            } else {
-                var image = document.createElement("img");
-                image.src = selectedImage;
-                cell.innerHTML = "";
-                cell.appendChild(image);
-                return true;
+            if (dropdown == null) {
+                return false;
             }
+
+            var url = dropdown.value;
+
+            //make an image element and set the source to the url
+
+            var image = document.createElement("img");
+            image.src = url;
+            image.style.maxWidth = "100px";
+            image.style.maxHeight = "100px";
+
+            cell.innerHTML = "";
+            //if there is an existing image, remove it
+            if (cell.childNodes.length > 0) {
+                cell.removeChild(cell.childNodes[0]);
+            }
+            cell.appendChild(image);
         }
 
-    </script>
+        updateGrid();
 
-    <select id="labelDimensionsDropdown" onchange="updateGrid(); updateImageGrid()">
-        <option value="">Select Label Dimension</option>
-        <script>
-            labelDimensions.forEach(function (dimension) {
-                var option = document.createElement("option");
-                option.value = dimension.template;
-                option.text = dimension.name;
-                document.getElementById("labelDimensionsDropdown").appendChild(option);
-            });
-
+        //request images and wait for response
+        populateImageDropdown();
+        
+        initializeImageDropdowns();
         </script>
-    </select>
-
-    <div id="gridContainer"></div>
-
-    <div id="imageGridContainer"></div>
 
 
 </body>
