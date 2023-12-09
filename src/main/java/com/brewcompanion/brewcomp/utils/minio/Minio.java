@@ -8,9 +8,11 @@ import java.util.Optional;
 
 import com.brewcompanion.brewcomp.Main;
 import com.brewcompanion.brewcomp.objects.Label;
+import com.brewcompanion.brewcomp.utils.Sanitizer;
 import com.brewcompanion.brewcomp.utils.Secrets;
 
 import io.minio.BucketExistsArgs;
+import io.minio.GetObjectArgs;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.ListObjectsArgs;
 import io.minio.MakeBucketArgs;
@@ -51,6 +53,7 @@ public class Minio {
         // check to see if the bucket exists
         validateBucket(Main.getConfig().getMinioQrCodeBucketName(), true, Main.getConfig().getMinioQrCodePolicy());
         validateBucket(Main.getConfig().getMinioLabelBucketName(), true, Main.getConfig().getMinioLabelPolicy());
+        validateBucket(Main.getConfig().getMinioTemplateBucketName(), true, Main.getConfig().getMinioTemplatePolicy());
 
     }
 
@@ -194,7 +197,7 @@ public class Minio {
                     .bucket(Main.getConfig().getMinioLabelBucketName())
                     .prefix(token + "/") // Specify the folder path using the token
                     .build()).forEach(items::add);
-                    
+
             // extract the static url from the item
             String[] urls = new String[items.size()];
             for (int i = 0; i < items.size(); i++) {
@@ -204,11 +207,11 @@ public class Minio {
                         .build());
             }
 
-            Label[] labels = new Label[urls.length];   
+            Label[] labels = new Label[urls.length];
             for (int i = 0; i < urls.length; i++) {
                 String[] split = urls[i].split("/");
                 String name = split[split.length - 1];
-                //remove everything after the first ?
+                // remove everything after the first ?
                 name = name.split("\\?")[0];
                 labels[i] = new Label(name, urls[i]);
             }
@@ -218,6 +221,65 @@ public class Minio {
             e.printStackTrace();
             Main.getLogger().error("Failed to get labels from Minio");
             return Optional.empty();
+        }
+    }
+
+    public static String getTemplate(String name) {
+        if (name == null) {
+            Main.getLogger().error("Name is null");
+            return null;
+        }
+        if (minioClient == null) {
+            Main.getLogger().error("Minio client is null");
+            return null;
+        }
+
+        name = name + ".html";
+
+        Main.getLogger().info("Getting template from Minio");
+        Main.getLogger().info("Name: {}", name);
+        
+
+
+        if (name.isEmpty()) {
+            Main.getLogger().error("Name is empty");
+            return null;
+        }
+
+        try {
+            // get the list of all files in the template bucket
+            List<Result<Item>> items = new ArrayList<>();
+            minioClient.listObjects(ListObjectsArgs.builder()
+                    .bucket(Main.getConfig().getMinioTemplateBucketName())
+                    .build()).forEach(items::add);
+
+            //print the list of files
+            for (Result<Item> item : items) {
+                Main.getLogger().info(item.get().objectName());
+            }
+
+            // find the file with the name
+            for (Result<Item> item : items) {
+                if (item.get().objectName().equals(name)) {
+                    // get the raw html from the file
+                    InputStream stream = minioClient.getObject(GetObjectArgs.builder()
+                            .bucket(Main.getConfig().getMinioTemplateBucketName())
+                            .object(item.get().objectName())
+                            .build());
+                    byte[] bytes = stream.readAllBytes();
+
+                    // convert the raw html to a string
+                    return new String(bytes);
+                }
+            }
+
+            Main.getLogger().error("Failed to get template from Minio");
+            return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Main.getLogger().error("Failed to get template from Minio");
+            return null;
         }
     }
 

@@ -26,12 +26,16 @@ public class Config {
     //minio specific config
     private String minioQrCodeBucketName;
     private String minioLabelBucketName;
+    private String minioTemplateBucketName;
 
     private String minioQrCodePolicy;
     private String minioLabelPolicy;
+    private String minioTemplatePolicy;
 
     private String minioQrCodePolicyJson;
     private String minioLabelPolicyJson;
+    private String minioTemplatePolicyJson;
+
 
     public static Config loadConfigFromFile(String filePath) {
         ObjectMapper objectMapper = new ObjectMapper();

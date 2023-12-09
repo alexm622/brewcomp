@@ -7,5 +7,7 @@
     "minioQrCodeBucketName": "brewcomp-qrcodes",
     "minioLabelBucketName": "brewcomp-labels",
     "minioQrCodePolicy": "./misc/minio/qrcode-policy.json",
-    "minioLabelPolicy": "./misc/minio/label-policy.json"
+    "minioLabelPolicy": "./misc/minio/label-policy.json",
+    "minioTemplateBucketName": "brewcomp-templates",
+    "minioTemplatePolicy": "./misc/minio/template-policy.json"
 }

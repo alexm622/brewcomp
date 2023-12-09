@@ -34,4 +34,10 @@ public class LabelAPI {
 		}
 	}
 
+	@GetMapping("/getTemplate")
+	public ResponseEntity<String> getTemplate(@RequestParam(name = "name", required = true) String name ) {
+		return ResponseEntity.ok(Minio.getTemplate(name));	
+	}
+	
+
 }

@@ -36,21 +36,21 @@
 </head>
 
 <body>
-    
+
     <script>
 
         // Define the label dimensions
         var labelDimensions = [
-            { width: 2, height: 1, template: "2x1.html", name: "2 by 1 labels" },
-            { width: 2, height: 3, template: "2x3.html", name: "2 by 3 labels" },
-            { width: 3, height: 2, template: "3x2.html", name: "3 by 2 labels" },
-            { width: 4, height: 2, template: "4x2.html", name: "4 by 2 labels" },
-            { width: 5, height: 3, template: "5x3.html", name: "5 by 3 labels" },
-            { width: 8, height: 4, template: "8x4.html", name: "8 by 4 labels" },
+            { width: 2, height: 1, template: "2x1", name: "2 by 1 labels" },
+            { width: 2, height: 3, template: "2x3", name: "2 by 3 labels" },
+            { width: 3, height: 2, template: "3x2", name: "3 by 2 labels" },
+            { width: 4, height: 2, template: "4x2", name: "4 by 2 labels" },
+            { width: 5, height: 3, template: "5x3", name: "5 by 3 labels" },
+            { width: 8, height: 4, template: "8x4", name: "8 by 4 labels" },
         ];
     </script>
 
-    <select id="labelDimensionsDropdown" onchange="updateGrid(); updateImageGrid()" >
+    <select id="labelDimensionsDropdown" onchange="updateGrid(); updateImageGrid()">
         <option value="">Select Label Dimension</option>
         <script>
             // Dynamically populate the label dimensions dropdown
@@ -66,16 +66,52 @@
 
     <div id="gridContainer"></div>
 
-    <div id="imageGridContainer"></div>
+    <div id="imageGridContainer">
+    </div>
 
     <script>
 
-       
+        //determine average latency to server
+        var latency = 0;
+
+        function getAverageLatency() {
+            var request = new XMLHttpRequest();
+            var start = new Date().getTime();
+            request.open('GET', 'http://localhost:8080/api/labels/getAvailableLabels?userToken=0', true);
+            request.onload = function () {
+                var end = new Date().getTime();
+                latency = end - start;
+            }
+            request.send();
+        }
+
+        getAverageLatency();
+
+
         var imageDropdownData = [
 
         ]
 
+        //get the template from the server as an html string
+        function loadTemplate(name, callback) {
+            var request = new XMLHttpRequest();
+            request.open('GET', 'http://localhost:8080/api/labels/getTemplate?name=' + name, true);
+            request.onload = function () {
+                var data = JSON.parse(this.response);
+                if (request.status >= 200 && request.status < 400) {
+                    callback(data);
+                } else {
+                    console.log('error');
+                }
+            }
+            request.send();
+        }
+
         function populateImageDropdown() {
+
+            //add an option for no image
+            imageDropdownData.push({ name: "No image", url: "" });
+
             // Make a GET request to retrieve available labels
             request = new XMLHttpRequest();
             request.open('GET', 'http://localhost:8080/api/labels/getAvailableLabels?userToken=0', true);
@@ -94,6 +130,7 @@
                 }
             }
             request.send();
+
             // Wait for the request to complete
             setTimeout(function () {
                 // Populate the dropdowns
@@ -137,7 +174,7 @@
                     var col = document.createElement("div");
                     col.classList.add("col");
                     col.textContent = "Cell " + (i * selectedDimension.width + j + 1);
-                    col.id = "cell" + (i * selectedDimension.width + j + 1);
+                    col.id = "label-" + (i * selectedDimension.width + j + 1);
 
                     var dropdown = document.createElement("select");
                     dropdown.classList.add("imageDropdown");
@@ -200,30 +237,35 @@
 
                     col.id = "imageCell" + (i * selectedDimension.width + j + 1);
 
-                    var dropdownId = "cell" + (i * selectedDimension.width + j + 1);
+                    var dropdownId = "label-" + (i * selectedDimension.width + j + 1);
                     var dropdown = document.getElementById(dropdownId).childNodes[1];
 
                     if (dropdown == null) {
                         return false;
                     }
 
-                    var url = dropdown.value;
+                    if (dropdown.value == "") {
+                        row.appendChild(col);
+                    } else {
+                        var url = dropdown.value;
 
-                    //make an image element and set the source to the url
 
-                    var image = document.createElement("img");
-                    image.src = url;
-                    image.style.maxWidth = "100px";
-                    image.style.maxHeight = "100px";
+                        //make an image element and set the source to the url
 
-                    //if there is an existing image, remove it
-                    if (col.childNodes.length > 0) {
-                        col.removeChild(cell.childNodes[0]);
+                        var image = document.createElement("img");
+                        image.src = url;
+                        image.style.maxWidth = "100px";
+                        image.style.maxHeight = "100px";
+
+                        //if there is an existing image, remove it
+                        if (col.childNodes.length > 0) {
+                            col.removeChild(cell.childNodes[0]);
+                        }
+                        col.appendChild(image);
+
+
+                        row.appendChild(col);
                     }
-                    col .appendChild(image);
-
-
-                    row.appendChild(col);
                 }
                 imageGridContainer.appendChild(row);
 
@@ -240,7 +282,7 @@
                 return false;
             }
 
-            var dropdownId = "cell" + number;
+            var dropdownId = "label-" + number;
             var dropdown = document.getElementById(dropdownId).childNodes[1];
 
             if (dropdown == null) {
@@ -263,14 +305,22 @@
             }
             cell.appendChild(image);
         }
+        //request images and wait 500ms
+
+        populateImageDropdown();
+
+
 
         updateGrid();
 
-        //request images and wait for response
-        populateImageDropdown();
-        
+
         initializeImageDropdowns();
-        </script>
+
+        //wait for the request to complete and update the image grid
+        setTimeout(function () {
+            updateImageGrid();
+        }, 1100 + latency);
+    </script>
 
 
 </body>
