@@ -37,290 +37,285 @@
 
 <body>
 
-    <script>
-
-        // Define the label dimensions
-        var labelDimensions = [
-            { width: 2, height: 1, template: "2x1", name: "2 by 1 labels" },
-            { width: 2, height: 3, template: "2x3", name: "2 by 3 labels" },
-            { width: 3, height: 2, template: "3x2", name: "3 by 2 labels" },
-            { width: 4, height: 2, template: "4x2", name: "4 by 2 labels" },
-            { width: 5, height: 3, template: "5x3", name: "5 by 3 labels" },
-            { width: 8, height: 4, template: "8x4", name: "8 by 4 labels" },
-        ];
-    </script>
-
-    <select id="labelDimensionsDropdown" onchange="updateGrid(); updateImageGrid()">
-        <option value="">Select Label Dimension</option>
+    <th:block th:replace="~{fragments/basic/navbar :: navbar}" />
+    <div class="label-stuff">
         <script>
-            // Dynamically populate the label dimensions dropdown
-            labelDimensions.forEach(function (dimension) {
-                var option = document.createElement("option");
-                option.value = dimension.template;
-                option.text = dimension.name;
-                document.getElementById("labelDimensionsDropdown").appendChild(option);
-            });
 
+            // Define the label dimensions
+            var labelDimensions = [
+                { width: 2, height: 1, template: "2x1", name: "2 by 1 labels" },
+                { width: 2, height: 3, template: "2x3", name: "2 by 3 labels" },
+                { width: 3, height: 2, template: "3x2", name: "3 by 2 labels" },
+                { width: 4, height: 2, template: "4x2", name: "4 by 2 labels" },
+                { width: 5, height: 3, template: "5x3", name: "5 by 3 labels" },
+                { width: 8, height: 4, template: "8x4", name: "8 by 4 labels" },
+            ];
+
+            //print function to only print things with the print-only class           
         </script>
-    </select>
 
-    <div id="gridContainer"></div>
+        <style>
+            @media print {
+                body * {
+                    visibility: hidden;
+                }
 
-    <div id="imageGridContainer">
-    </div>
+                .print-only,
+                .print-only * {
+                    visibility: visible;
+                }
 
-    <script>
-
-        //determine average latency to server
-        var latency = 0;
-
-        function getAverageLatency() {
-            var request = new XMLHttpRequest();
-            var start = new Date().getTime();
-            request.open('GET', 'http://localhost:8080/api/labels/getAvailableLabels?userToken=0', true);
-            request.onload = function () {
-                var end = new Date().getTime();
-                latency = end - start;
-            }
-            request.send();
-        }
-
-        getAverageLatency();
-
-
-        var imageDropdownData = [
-
-        ]
-
-        //get the template from the server as an html string
-        function loadTemplate(name, callback) {
-            var request = new XMLHttpRequest();
-            request.open('GET', 'http://localhost:8080/api/labels/getTemplate?name=' + name, true);
-            request.onload = function () {
-                var data = JSON.parse(this.response);
-                if (request.status >= 200 && request.status < 400) {
-                    callback(data);
-                } else {
-                    console.log('error');
+                .print-only {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
                 }
             }
-            request.send();
-        }
 
-        function populateImageDropdown() {
+            
 
-            //add an option for no image
-            imageDropdownData.push({ name: "No image", url: "" });
+        </style>
 
-            // Make a GET request to retrieve available labels
-            request = new XMLHttpRequest();
-            request.open('GET', 'http://localhost:8080/api/labels/getAvailableLabels?userToken=0', true);
-            request.onload = function () {
-                // Begin accessing JSON data here
-                var data = JSON.parse(this.response);
-                if (request.status >= 200 && request.status < 400) {
-                    data.forEach(label => {
-                        imageDropdownData.push({ name: label.name, url: label.url });
-                    });
-                } else {
-                    // If no labels are available, display a message
-                    imageDropdownData.push({ name: "No labels available", url: "" });
+        <select id="labelDimensionsDropdown" onchange="updateGrid(); updateImageGrid()"
+            style="position: relative; top: 0; left: 0;">
+            <option value="">Select Label Dimension</option>
+            <script>
+                // Dynamically populate the label dimensions dropdown
+                labelDimensions.forEach(function (dimension) {
+                    var option = document.createElement("option");
+                    option.value = dimension.template;
+                    option.text = dimension.name;
+                    document.getElementById("labelDimensionsDropdown").appendChild(option);
+                });
 
-                    console.log('error');
+            </script>
+        </select>
+
+        <div id="gridContainer"></div>
+
+        <div id="imageGridContainer" class="print-only"></div>
+
+        <button onclick="window.print()">Print</button>
+
+        <script>
+
+            //determine average latency to server
+            var latency = 0;
+
+            function getAverageLatency() {
+                var request = new XMLHttpRequest();
+                var start = new Date().getTime();
+                request.open('GET', 'http://localhost:8080/api/labels/getAvailableLabels?userToken=0', true);
+                request.onload = function () {
+                    var end = new Date().getTime();
+                    latency = end - start;
+                }
+                request.send();
+            }
+
+            getAverageLatency();
+
+
+            var imageDropdownData = [
+
+            ]
+
+            //get the template from the server as an html string
+            function loadTemplate(name, callback) {
+                var request = new XMLHttpRequest();
+                request.open('GET', 'http://localhost:8080/api/labels/getTemplate?name=' + name, true);
+                request.onload = function () {
+                    var data = this.response;
+                    if (request.status >= 200 && request.status < 400) {
+                        callback(data);
+                    } else {
+                        console.log('error');
+                    }
+                }
+                request.send();
+            }
+
+            function populateImageDropdown() {
+
+                //add an option for no image
+                imageDropdownData.push({ name: "No image", url: "" });
+
+                // Make a GET request to retrieve available labels
+                request = new XMLHttpRequest();
+                request.open('GET', 'http://localhost:8080/api/labels/getAvailableLabels?userToken=0', true);
+                request.onload = function () {
+                    // Begin accessing JSON data here
+                    var data = JSON.parse(this.response);
+                    if (request.status >= 200 && request.status < 400) {
+                        data.forEach(label => {
+                            imageDropdownData.push({ name: label.name, url: label.url });
+                        });
+                    } else {
+                        // If no labels are available, display a message
+                        imageDropdownData.push({ name: "No labels available", url: "" });
+
+                        console.log('error');
+                    }
+                }
+                request.send();
+
+                // Wait for the request to complete
+                setTimeout(function () {
+                    // Populate the dropdowns
+                    var dropdowns = document.getElementsByClassName("imageDropdown");
+                    for (var i = 0; i < dropdowns.length; i++) {
+                        var dropdown = dropdowns[i];
+                        dropdown.innerHTML = "";
+                        imageDropdownData.forEach(function (image) {
+                            var option = document.createElement("option");
+                            option.value = image.url;
+                            option.text = image.name;
+
+                            dropdown.appendChild(option);
+                        });
+                    }
+                }, 1000);
+
+            }
+
+            var ratioX = 4;
+            var ratioY = 3;
+
+            function updateGrid() {
+                var selectedTemplate = document.getElementById("labelDimensionsDropdown").value;
+                var selectedDimension = labelDimensions.find(function (dimension) {
+                    return dimension.template === selectedTemplate;
+                });
+
+                // Update the ratio
+                ratioX = selectedDimension.width;
+                ratioY = selectedDimension.height;
+
+                var gridContainer = document.getElementById("gridContainer");
+                gridContainer.innerHTML = "";
+
+                for (var i = 0; i < selectedDimension.height; i++) {
+                    var row = document.createElement("div");
+                    row.classList.add("row");
+
+                    for (var j = 0; j < selectedDimension.width; j++) {
+                        var col = document.createElement("div");
+                        col.classList.add("col");
+                        col.textContent = "Cell " + (i * selectedDimension.width + j + 1);
+                        col.id = "labelDropdown-" + (i * selectedDimension.width + j + 1);
+
+                        var dropdown = document.createElement("select");
+                        dropdown.classList.add("imageDropdown");
+
+                        var number = (i * selectedDimension.width + j + 1);
+                        dropdown.addEventListener("change", (function (num) {
+                            return function () {
+                                console.log("update cell " + num);
+                                updateCell(num);
+                            };
+                        })(number));
+
+                        imageDropdownData.forEach(function (image) {
+                            var option = document.createElement("option");
+                            option.value = image.url;
+                            option.text = image.name;
+
+                            dropdown.appendChild(option);
+                        });
+
+                        col.appendChild(dropdown);
+                        row.appendChild(col);
+                    }
+
+                    gridContainer.appendChild(row);
+
                 }
             }
-            request.send();
 
-            // Wait for the request to complete
-            setTimeout(function () {
-                // Populate the dropdowns
+            function initializeImageDropdowns() {
                 var dropdowns = document.getElementsByClassName("imageDropdown");
                 for (var i = 0; i < dropdowns.length; i++) {
                     var dropdown = dropdowns[i];
-                    dropdown.innerHTML = "";
-                    imageDropdownData.forEach(function (image) {
-                        var option = document.createElement("option");
-                        option.value = image.url;
-                        option.text = image.name;
-
-                        dropdown.appendChild(option);
+                    dropdown.addEventListener("change", function (event) {
+                        console.log("update cell " + event.target.id);
+                        updateCell(event.target.id);
                     });
                 }
-            }, 1000);
-
-        }
-
-        var ratioX = 4;
-        var ratioY = 3;
-
-        function updateGrid() {
-            var selectedTemplate = document.getElementById("labelDimensionsDropdown").value;
-            var selectedDimension = labelDimensions.find(function (dimension) {
-                return dimension.template === selectedTemplate;
-            });
-
-            // Update the ratio
-            ratioX = selectedDimension.width;
-            ratioY = selectedDimension.height;
-
-            var gridContainer = document.getElementById("gridContainer");
-            gridContainer.innerHTML = "";
-
-            for (var i = 0; i < selectedDimension.height; i++) {
-                var row = document.createElement("div");
-                row.classList.add("row");
-
-                for (var j = 0; j < selectedDimension.width; j++) {
-                    var col = document.createElement("div");
-                    col.classList.add("col");
-                    col.textContent = "Cell " + (i * selectedDimension.width + j + 1);
-                    col.id = "label-" + (i * selectedDimension.width + j + 1);
-
-                    var dropdown = document.createElement("select");
-                    dropdown.classList.add("imageDropdown");
-
-                    var number = (i * selectedDimension.width + j + 1);
-                    dropdown.addEventListener("change", (function (num) {
-                        return function () {
-                            console.log("update cell " + num);
-                            updateCell(num);
-                        };
-                    })(number));
-
-                    imageDropdownData.forEach(function (image) {
-                        var option = document.createElement("option");
-                        option.value = image.url;
-                        option.text = image.name;
-
-                        dropdown.appendChild(option);
-                    });
-
-                    col.appendChild(dropdown);
-                    row.appendChild(col);
-                }
-
-                gridContainer.appendChild(row);
-
             }
-        }
 
-        function initializeImageDropdowns() {
-            var dropdowns = document.getElementsByClassName("imageDropdown");
-            for (var i = 0; i < dropdowns.length; i++) {
-                var dropdown = dropdowns[i];
-                dropdown.addEventListener("change", function (event) {
-                    console.log("update cell " + event.target.id);
-                    updateCell(event.target.id);
+            function updateImageGrid() {
+                var selectedTemplate = document.getElementById("labelDimensionsDropdown").value;
+                var selectedDimension = labelDimensions.find(function (dimension) {
+                    return dimension.template === selectedTemplate;
                 });
+
+                var imageGridContainer = document.getElementById("imageGridContainer");
+                imageGridContainer.innerHTML = "";
+
+                selectedTemplate = selectedDimension.width + "x" + selectedDimension.height;
+
+                //load the grid from loadTemplate
+                loadTemplate(selectedTemplate, function (template) {
+                    imageGridContainer.innerHTML = template;
+                });
+
             }
-        }
 
-        function updateImageGrid() {
-            var selectedTemplate = document.getElementById("labelDimensionsDropdown").value;
-            var selectedDimension = labelDimensions.find(function (dimension) {
-                return dimension.template === selectedTemplate;
-            });
+            function updateCell(number) {
 
-            var imageGridContainer = document.getElementById("imageGridContainer");
-            imageGridContainer.innerHTML = "";
+                var cellId = "label-" + number;
+                var cell = document.getElementById(cellId);
 
-            for (var i = 0; i < selectedDimension.height; i++) {
-                var row = document.createElement("div");
-                row.classList.add("row");
-
-                for (var j = 0; j < selectedDimension.width; j++) {
-                    var col = document.createElement("div");
-                    col.classList.add("col");
-                    //restrict the size of the image
-                    col.style.maxWidth = "100px";
-                    col.style.maxHeight = "100px";
-
-                    col.id = "imageCell" + (i * selectedDimension.width + j + 1);
-
-                    var dropdownId = "label-" + (i * selectedDimension.width + j + 1);
-                    var dropdown = document.getElementById(dropdownId).childNodes[1];
-
-                    if (dropdown == null) {
-                        return false;
-                    }
-
-                    if (dropdown.value == "") {
-                        row.appendChild(col);
-                    } else {
-                        var url = dropdown.value;
-
-
-                        //make an image element and set the source to the url
-
-                        var image = document.createElement("img");
-                        image.src = url;
-                        image.style.maxWidth = "100px";
-                        image.style.maxHeight = "100px";
-
-                        //if there is an existing image, remove it
-                        if (col.childNodes.length > 0) {
-                            col.removeChild(cell.childNodes[0]);
-                        }
-                        col.appendChild(image);
-
-
-                        row.appendChild(col);
-                    }
+                if (cell == null) {
+                    return false;
                 }
-                imageGridContainer.appendChild(row);
 
+                var dropdownId = "labelDropdown-" + number;
+                console.log(dropdownId);
+                var dropdown = document.getElementById(dropdownId).childNodes[1];
+
+                if (dropdown == null) {
+                    return false;
+                }
+
+                var url = dropdown.value;
+
+                //make an image element and set the source to the url
+
+                var image = document.createElement("img");
+                image.src = url;
+
+                //set the image to fit the cell
+                image.style.width = "100%";
+                image.style.height = "100%";
+                image.style.objectFit = "contain";
+
+
+                cell.innerHTML = "";
+                //if there is an existing image, remove it
+                if (cell.childNodes.length > 0) {
+                    cell.removeChild(cell.childNodes[0]);
+                }
+                cell.appendChild(image);
             }
+            //request images and wait 500ms
 
-        }
-
-        function updateCell(number) {
-
-            var cellId = "imageCell" + number;
-            var cell = document.getElementById(cellId);
-
-            if (cell == null) {
-                return false;
-            }
-
-            var dropdownId = "label-" + number;
-            var dropdown = document.getElementById(dropdownId).childNodes[1];
-
-            if (dropdown == null) {
-                return false;
-            }
-
-            var url = dropdown.value;
-
-            //make an image element and set the source to the url
-
-            var image = document.createElement("img");
-            image.src = url;
-            image.style.maxWidth = "100px";
-            image.style.maxHeight = "100px";
-
-            cell.innerHTML = "";
-            //if there is an existing image, remove it
-            if (cell.childNodes.length > 0) {
-                cell.removeChild(cell.childNodes[0]);
-            }
-            cell.appendChild(image);
-        }
-        //request images and wait 500ms
-
-        populateImageDropdown();
+            populateImageDropdown();
 
 
 
-        updateGrid();
+            updateGrid();
 
 
-        initializeImageDropdowns();
+            initializeImageDropdowns();
 
-        //wait for the request to complete and update the image grid
-        setTimeout(function () {
-            updateImageGrid();
-        }, 1100 + latency);
-    </script>
+            //wait for the request to complete and update the image grid
+            setTimeout(function () {
+                updateImageGrid();
+            }, 1100 + latency);
+        </script>
+    </div>
+
 
 
 </body>
