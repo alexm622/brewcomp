@@ -19,5 +19,11 @@ public class LabelController {
         return "labelmaker/print-label";        
     }
 	
+    //editor stuff
+
+	@GetMapping("editor")
+	public String editor(Model model) {
+		return "labelmaker/editor";
+	}
 
 }

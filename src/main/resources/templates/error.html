@@ -2,12 +2,49 @@
 
 <!DOCTYPE html>
 <html xml:lang>
-  <head>
-    <meta charset="UTF-8">
-    <title>Error</title>
-  </head>
-  <body>
-    <h1>Error</h1>
-    <p th:text="|details: ${message}!|" />
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Error</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2em;
+    }
+
+    p {
+      font-size: 1.2em;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5em;
+      }
+
+      p {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Error</h1>
+  <p th:text="|details: ${message}!|" />
+  <p th:text="|URL: ${url}!|" />
+  <p th:text="|Timestamp: ${timestamp}!|" />
+  <p th:text="|Exception: ${exception}!|" />
+</body>
+
 </html>

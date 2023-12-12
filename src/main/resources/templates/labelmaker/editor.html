@@ -5,7 +5,7 @@
 
 <head>
 
-    <th:block th:replace="~{fragments/header :: header}" />
+    <th:block th:replace="~{fragments/essentials/header :: header}">
     <title>My Website</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,36 +37,48 @@
     </th:block>
 
     <link rel="stylesheet" href="https://uicdn.toast.com/tui-image-editor/latest/tui-image-editor.css" />
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.css">
+    <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.js"></script>
     <script src="https://uicdn.toast.com/tui-image-editor/latest/tui-image-editor.js"></script>
+
+
 
 
 </head>
 
 <body>
+    <th:block th:replace="~{fragments/basic/navbar :: navbar}" />
     <div id="image-editor"></div>
     <button id="submit-button">Submit</button>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/minio.js/7.0.1/minio.min.js"></script>
+    <style>
+        #image-editor {
+            min-width: 100%;
+            /* Replace with your desired minimum width */
+            min-height: 8in;
+            /* Replace with your desired minimum height */
+        }
+    </style>
     <script>
         $(document).ready(function () {
             // Create a new instance of ToastUI Image Editor
             var imageEditor = new tui.ImageEditor('#image-editor', {
                 includeUI: {
                     loadImage: {
-                        path: 'https://samplelib.com/lib/preview/png/sample-boat-400x300.png',
-                        name: 'Sample Image'
+                        path: 'https://uicdn.toast.com/toastui/img/tui-image-editor-bi.png',
+                        name: 'SampleImage'
                     },
-                    menu: ['shape', 'filter'],
                     initMenu: 'filter',
-                    uiSize: {
-                        width: '1000px',
-                        height: '700px'
-                    }
+                    menuBarPosition: 'bottom'
                 },
+                cssMaxHeight: 900,
                 cssMaxWidth: 700,
-                cssMaxHeight: 500,
-                usageStatistics: false
+
+                selectionStyle: {
+                    cornerSize: 20,
+                    rotatingPointOffset: 70
+                }
             });
+
 
             // Add event listener to the submit button
             $('#submit-button').click(function () {
@@ -85,26 +97,9 @@
                 // Create a FormData object and append the Blob
                 var formData = new FormData();
                 formData.append('image', blob, 'image.png');
-
-                // Initialize Minio client
-                var minioClient = new Minio.Client({
-                    endPoint: 'localhost',
-                    port: 9000,
-                    useSSL: false,
-                    accessKey: '',
-                    secretKey: ''
-                });
-
-                // Upload the image to the Minio bucket
-                minioClient.putObject('chum', 'image.png', blob, function (err, etag) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log('Image uploaded successfully');
-                    }
-                });
             });
         });
     </script>
 </body>
+
 </html>
