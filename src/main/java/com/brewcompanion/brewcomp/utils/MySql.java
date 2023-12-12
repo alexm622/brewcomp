@@ -27,4 +27,8 @@ public class MySql {
     public static HikariDataSource getDataSource() {
         return dataSource;
     }
+
+    public static void shutdown() {
+        dataSource.close();
+    }
 }
