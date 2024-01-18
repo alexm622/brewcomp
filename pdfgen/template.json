@@ -1,0 +1,17 @@
+[
+    {
+        "name": "4x3.33",
+        "horizontal_count": 2,
+        "vertical_count": 3,
+        "label_dimensions": {
+            "width": "4in",
+            "height": "3 1/3in"
+        },
+        "top_margin": ".45in",
+        "middle_margin": "6mm",
+        "bottom_margin": "13mm",
+        "left_margin": "2mm",
+        "right_margin": "3.75mm",
+        "radius": "3mm"
+    }
+]

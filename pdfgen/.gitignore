@@ -1,0 +1,21 @@
+# Flask environment variables
+.env
+
+# Flask development server
+__pycache__/
+*.pyc
+*.pyo
+
+# Flask logs
+logs/
+*.log
+
+# Flask database
+db.sqlite3
+
+# Flask package dependencies
+lib/
+lib64/
+bin/
+include/
+share/

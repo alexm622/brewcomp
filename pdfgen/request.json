@@ -1,0 +1,19 @@
+{
+    "template_id": 0,
+    "request_id": 0,
+    "user_id": 0,
+    "unix_timestamp": 0,
+    "template_name": "string",
+    "template_description": "string",
+    "template_type": "string",
+    "template_content": [
+        {
+            "coor_x": 0,
+            "coor_y": 0,
+            "image_id": 0,
+            "image_url": "string",
+            "image_description": "string",
+            "has_qr_code": true
+        }
+    ]
+}
