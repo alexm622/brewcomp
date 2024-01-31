@@ -52,15 +52,32 @@
           if ($(this).is(':checked')) {
             $('#flatly-theme').attr('disabled', true);
             $('#darkly-theme').attr('disabled', false);
+            //store a cookie to remember the user's preference
+            document.cookie = "theme=dark";
           } else {
             $('#flatly-theme').attr('disabled', false);
             $('#darkly-theme').attr('disabled', true);
+            //store a cookie to remember the user's preference
+            document.cookie = "theme=light";
           }
         });
       });
 
       //on document load, check if darkswitch is checked
       $(document).ready(function () {
+        //first check cookies
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          if (cookies[i].includes('theme')) {
+            var theme = cookies[i].split('=')[1];
+            if (theme == 'dark') {
+              $('#darkSwitch').attr('checked', true);
+              $('#flatly-theme').attr('disabled', true);
+              $('#darkly-theme').attr('disabled', false);
+            }
+          }
+        }
+        //if no cookie is found, check the user's preference
         if ($('#darkSwitch').is(':checked')) {
           $('#flatly-theme').attr('disabled', true);
           $('#darkly-theme').attr('disabled', false);
@@ -89,7 +106,7 @@
       <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">Home</a>
+            <a class="nav-link" href="/">Home</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -101,7 +118,7 @@
               <a class="dropdown-item" href="#">Recipe 2</a>
               <a class="dropdown-item" href="#">Recipe 3</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">All Recipes</a>
+              <a class="dropdown-item" href="recipes">All Recipes</a>
             </div>
           </li>
           <li class="nav-item">
