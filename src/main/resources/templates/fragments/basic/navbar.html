@@ -59,6 +59,17 @@
         });
       });
 
+      //on document load, check if darkswitch is checked
+      $(document).ready(function () {
+        if ($('#darkSwitch').is(':checked')) {
+          $('#flatly-theme').attr('disabled', true);
+          $('#darkly-theme').attr('disabled', false);
+        } else {
+          $('#flatly-theme').attr('disabled', false);
+          $('#darkly-theme').attr('disabled', true);
+        }
+      });
+
       //if i hit enter in the search bar, submit the form
       $(document).ready(function () {
         $('#search').keypress(function (e) {
