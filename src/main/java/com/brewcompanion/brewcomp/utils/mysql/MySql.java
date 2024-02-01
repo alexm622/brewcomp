@@ -1,6 +1,7 @@
-package com.brewcompanion.brewcomp.utils;
+package com.brewcompanion.brewcomp.utils.mysql;
 
 import com.brewcompanion.brewcomp.Main;
+import com.brewcompanion.brewcomp.utils.Secrets;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 

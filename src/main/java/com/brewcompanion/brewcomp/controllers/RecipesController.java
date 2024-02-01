@@ -37,11 +37,16 @@ public class RecipesController {
             for (int j = 0; j < 3; j++) {
                 if (i < recipes.size()) {
                     row.add(recipes.get(i));
+                    //log the recipe
+                    Main.getLogger().info(recipes.get(i).getName());
                     i++;
                 }
             }
             table.add(row);
         }
+
+        
+
         return table;
     }
 

@@ -13,7 +13,7 @@ public class Recipe implements Serializable{
 
     private final String name;
     private final String hash;
-    private final String id;
+    private final int id;
 
     private final String author;
     private final String authorHash;
@@ -33,7 +33,7 @@ public class Recipe implements Serializable{
 
     private String recipeType;
 
-    public Recipe(String name, String hash, String id, String author, String authorHash, String authorID, String description) {
+    public Recipe(String name, String hash, int id, String author, String authorHash, String authorID, String description) {
         this.name = name;
         this.hash = hash;
         this.id = id;
@@ -53,7 +53,7 @@ public class Recipe implements Serializable{
         Recipe recipe1 = new Recipe(
             "Chocolate Stout",
             "hash1",
-            "id1",
+            1,
             "John Doe",
             "authorHash1",
             "authorID1",
@@ -73,7 +73,7 @@ public class Recipe implements Serializable{
         Recipe recipe2 = new Recipe(
             "IPA",
             "hash2",
-            "id2",
+            2,
             "Jane Smith",
             "authorHash2",
             "authorID2",
@@ -93,7 +93,7 @@ public class Recipe implements Serializable{
         Recipe recipe3 = new Recipe(
             "Belgian Dubbel",
             "hash3",
-            "id3",
+            3,
             "Bob Johnson",
             "authorHash3",
             "authorID3",
@@ -120,7 +120,7 @@ public class Recipe implements Serializable{
             for (int i = 0; i < count; i++) {
                 String name = "Recipe " + (i + 1);
                 String hash = "hash" + (i + 1);
-                String id = "id" + (i + 1);
+                Integer id = i;
                 String author = "Author " + (i + 1);
                 String authorHash = "authorHash" + (i + 1);
                 String authorID = "authorID" + (i + 1);

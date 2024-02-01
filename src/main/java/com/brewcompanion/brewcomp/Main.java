@@ -2,13 +2,16 @@ package com.brewcompanion.brewcomp;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bouncycastle.util.test.FixedSecureRandom.Data;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.brewcompanion.brewcomp.utils.Config;
-import com.brewcompanion.brewcomp.utils.MySql;
 import com.brewcompanion.brewcomp.utils.minio.Minio;
+import com.brewcompanion.brewcomp.utils.mysql.DatabaseInitializer;
+import com.brewcompanion.brewcomp.utils.mysql.MySql;
+import com.brewcompanion.brewcomp.utils.mysql.MySqlDebug;
 
 import lombok.Getter;
 
@@ -68,7 +71,11 @@ public class Main {
 			// intialize mysql
 			logger.info("Initializing MySql...");
 			MySql.initialize();
+			DatabaseInitializer.initialize();
 			logger.info("MySql initialized.");
+			
+			// TODO remove this
+			//MySqlDebug.resetAll();
 		} catch (Exception e) {
 			Main.getLogger().error("Failed to initialize MySql.");
 			e.printStackTrace();
