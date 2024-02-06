@@ -19,16 +19,17 @@ public class Recipe implements Serializable{
     private final String authorHash;
     private final int authorID;
 
+
+    private String description;
+    private String recipeInstructions;
+
     private String parentName;
     private String parentHash;
-    private int parentID;
+    private  int parentID;
     private String parentAuthor;
     private String parentAutherHash;
     private int parentAuthorID;
 
-    private final String description;
-
-    private String recipeInstructions;
     
 
     private String recipeType;
