@@ -2,13 +2,11 @@ package com.brewcompanion.brewcomp.utils.minio;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import com.brewcompanion.brewcomp.Main;
 import com.brewcompanion.brewcomp.objects.Label;
-import com.brewcompanion.brewcomp.utils.Sanitizer;
 import com.brewcompanion.brewcomp.utils.Secrets;
 
 import io.minio.BucketExistsArgs;

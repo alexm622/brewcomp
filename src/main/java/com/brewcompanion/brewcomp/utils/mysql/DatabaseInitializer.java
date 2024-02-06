@@ -16,9 +16,7 @@ public class DatabaseInitializer {
     private static void tables() {
         try {
             List<TableEnum> tables = checkTables();
-            if(tables != null && !tables.contains(null)) {
-                return;
-            }
+
             createTables(tables);
         } catch (Exception e) {
             Main.getLogger().error("Failed to create tables.");
@@ -34,11 +32,14 @@ public class DatabaseInitializer {
             try(Statement stmt = conn.createStatement()) {
                 stmt.execute(Constants.CHECK_USERS_TABLE);
             } catch (SQLException e) {
+                //log error
+                Main.getLogger().error("Table \"users\" does not exist.");
                 l.add(TableEnum.USERS);
             }
             try(Statement stmt = conn.createStatement()) {
                 stmt.execute(Constants.CHECK_RECIPES_TABLE);
             } catch (SQLException e) {
+                Main.getLogger().error("Table \"recipes\" does not exist");
                 l.add(TableEnum.RECIPES);
             }
         } catch (SQLException e) {

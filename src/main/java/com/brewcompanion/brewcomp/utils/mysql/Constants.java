@@ -72,7 +72,15 @@ public class Constants {
     public final static String CHECK_RECIPES_TABLE = "SELECT * FROM Recipes;";
     public final static String CHECK_USERS_TABLE = "SELECT * FROM Users;";
 
+    //table insertions
 
+    public final static String INSERT_RECIPE = 
+    "INSERT INTO Recipes (name, hash, author, authorHash, authorID, description, recipeInstructions, recipeType, parentName, parentHash, parentID, parentAuthor, parentAuthorHash, parentAuthorID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+    public final static String INSERT_USER = 
+    "INSERT INTO Users (username, hash, email, salt) VALUES (?, ?, ?, ?);";
+
+    
 
 
 }

@@ -17,14 +17,14 @@ public class Recipe implements Serializable{
 
     private final String author;
     private final String authorHash;
-    private final String authorID;
+    private final int authorID;
 
     private String parentName;
     private String parentHash;
-    private String parentID;
+    private int parentID;
     private String parentAuthor;
     private String parentAutherHash;
-    private String parentAuthorID;
+    private int parentAuthorID;
 
     private final String description;
 
@@ -33,7 +33,7 @@ public class Recipe implements Serializable{
 
     private String recipeType;
 
-    public Recipe(String name, String hash, int id, String author, String authorHash, String authorID, String description) {
+    public Recipe(String name, String hash, int id, String author, String authorHash, int authorID, String description) {
         this.name = name;
         this.hash = hash;
         this.id = id;
@@ -42,9 +42,7 @@ public class Recipe implements Serializable{
         this.authorID = authorID;
         this.description = description;
     }
-    
-
-    
+        
 
     public static List<Recipe> getExampleData(){
         List<Recipe> exampleData = new ArrayList<>();
@@ -56,15 +54,15 @@ public class Recipe implements Serializable{
             1,
             "John Doe",
             "authorHash1",
-            "authorID1",
+            1,
             "A rich and chocolatey stout with a smooth finish."
         );
         recipe1.setParentName("Stout");
         recipe1.setParentHash("parentHash1");
-        recipe1.setParentID("parentId1");
+        recipe1.setParentID(1);
         recipe1.setParentAuthor("Jane Smith");
         recipe1.setParentAutherHash("parentAuthorHash1");
-        recipe1.setParentAuthorID("parentAuthorID1");
+        recipe1.setParentAuthorID(1);
         recipe1.setRecipeInstructions("1. Boil water\n2. Add malt\n3. Add hops\n4. Ferment\n5. Add cocoa powder\n6. Bottle");
         recipe1.setRecipeType("Stout");
         exampleData.add(recipe1);
@@ -76,15 +74,15 @@ public class Recipe implements Serializable{
             2,
             "Jane Smith",
             "authorHash2",
-            "authorID2",
+            1,
             "A hoppy and refreshing IPA with a citrusy aroma."
         );
         recipe2.setParentName("Pale Ale");
         recipe2.setParentHash("parentHash2");
-        recipe2.setParentID("parentId2");
+        recipe2.setParentID(1);
         recipe2.setParentAuthor("John Doe");
         recipe2.setParentAutherHash("parentAuthorHash2");
-        recipe2.setParentAuthorID("parentAuthorID2");
+        recipe2.setParentAuthorID(1);
         recipe2.setRecipeInstructions("1. Boil water\n2. Add malt\n3. Add hops\n4. Ferment\n5. Bottle");
         recipe2.setRecipeType("IPA");
         exampleData.add(recipe2);
@@ -96,15 +94,15 @@ public class Recipe implements Serializable{
             3,
             "Bob Johnson",
             "authorHash3",
-            "authorID3",
+            1,
             "A malty and complex Belgian Dubbel with notes of dark fruit."
         );
         recipe3.setParentName("Belgian Ale");
         recipe3.setParentHash("parentHash3");
-        recipe3.setParentID("parentId3");
+        recipe3.setParentID(1);
         recipe3.setParentAuthor("Bob Johnson");
         recipe3.setParentAutherHash("parentAuthorHash3");
-        recipe3.setParentAuthorID("parentAuthorID3");
+        recipe3.setParentAuthorID(1);
         recipe3.setRecipeInstructions("1. Boil water\n2. Add malt\n3. Add hops\n4. Ferment\n5. Add dark candi sugar\n6. Bottle");
         recipe3.setRecipeType("Belgian Dubbel");
         exampleData.add(recipe3);
@@ -123,14 +121,14 @@ public class Recipe implements Serializable{
                 Integer id = i;
                 String author = "Author " + (i + 1);
                 String authorHash = "authorHash" + (i + 1);
-                String authorID = "authorID" + (i + 1);
+                int authorID = (i + 1);
                 String description = "Description for Recipe " + (i + 1);
                 String parentName = "Parent Recipe " + random.nextInt(count);
                 String parentHash = "parentHash" + random.nextInt(count);
-                String parentID = "parentId" + random.nextInt(count);
+                int parentID = random.nextInt(count);
                 String parentAuthor = "Parent Author " + random.nextInt(count);
-                String parentAutherHash = "parentAuthorHash" + random.nextInt(count);
-                String parentAuthorID = "parentAuthorID" + random.nextInt(count);
+                String parentAuthorHash = "parentAuthorHash" + random.nextInt(count);
+                int parentAuthorID = random.nextInt(count);
                 String recipeInstructions = "1. Boil water\n2. Add malt\n3. Add hops\n4. Ferment\n5. Bottle";
                 String recipeType = "Recipe Type " + random.nextInt(count);
 
@@ -139,7 +137,7 @@ public class Recipe implements Serializable{
                 recipe.setParentHash(parentHash);
                 recipe.setParentID(parentID);
                 recipe.setParentAuthor(parentAuthor);
-                recipe.setParentAutherHash(parentAutherHash);
+                recipe.setParentAutherHash(parentAuthorHash);
                 recipe.setParentAuthorID(parentAuthorID);
                 recipe.setRecipeInstructions(recipeInstructions);
                 recipe.setRecipeType(recipeType);
