@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.brewcompanion.brewcomp.Main;
 import com.brewcompanion.brewcomp.objects.Recipe;
+import com.brewcompanion.brewcomp.utils.mysql.MysqlRecipeHandler;
 
 @Controller
 @RequestMapping(value = {"/recipes"})
@@ -20,6 +21,8 @@ public class RecipesController {
 	@GetMapping("")
 	public String recipes(@RequestParam(name="page", required=false, defaultValue="1") Integer page, Model model) {
         List<Recipe> recipes = Recipe.getRandomData(12);
+        //try inserting the recipes
+
         //log the recipes
         for (Recipe recipe : recipes) {
             Main.getLogger().info(recipe.getName());

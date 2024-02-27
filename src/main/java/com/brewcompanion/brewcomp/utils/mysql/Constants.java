@@ -80,7 +80,10 @@ public class Constants {
     public final static String INSERT_USER = 
     "INSERT INTO Users (username, hash, email, salt) VALUES (?, ?, ?, ?);";
 
-    
+    //get commands
+
+    //recipe stuff
+    public final static String GET_RECIPE = "SELECT * FROM Recipes WHERE id = ? LIMIT ?;";
 
 
 }

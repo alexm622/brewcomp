@@ -2,6 +2,7 @@ package com.brewcompanion.brewcomp.utils.mysql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import com.brewcompanion.brewcomp.objects.Recipe;
 import com.brewcompanion.brewcomp.objects.User;
@@ -12,19 +13,20 @@ public class MysqlRecipeHandler {
 
         try(Connection conn = MySql.getDataSource().getConnection()){
             try (PreparedStatement pstmt = conn.prepareStatement(Constants.INSERT_RECIPE)) {
-                pstmt.setString(1, recipe.getName());
-                pstmt.setString(2, recipe.getHash());
-                pstmt.setString(3, recipe.getAuthor());
-                pstmt.setString(4, recipe.getAuthorHash());
+                pstmt.setInt(1, recipe.getId());
+                pstmt.setString(2, recipe.getName());
+                pstmt.setString(3, recipe.getHash());
+                pstmt.setString(4, recipe.getAuthor());
                 pstmt.setInt(5, recipe.getAuthorID());
-                pstmt.setString(6, recipe.getDescription());
-                pstmt.setString(7, recipe.getRecipeInstructions());
-                pstmt.setString(8, recipe.getRecipeType());
-                pstmt.setString(9, recipe.getParentName());
-                pstmt.setString(10, recipe.getParentHash());
-                pstmt.setInt(11, recipe.getParentID());
-                pstmt.setString(12, recipe.getParentAuthor());
-                pstmt.setString(13, recipe.getParentAutherHash());
+                pstmt.setString(6, recipe.getAuthorHash());
+                pstmt.setString(7, recipe.getDescription());
+                pstmt.setString(8, recipe.getRecipeInstructions());
+                pstmt.setString(9, recipe.getRecipeType());
+                pstmt.setString(10, recipe.getParentName());
+                pstmt.setString(11, recipe.getParentHash());
+                pstmt.setInt(12, recipe.getParentID());
+                pstmt.setString(13, recipe.getParentAuthor());
+                pstmt.setString(14, recipe.getParentAutherHash());
 
                 pstmt.execute();
             } catch (Exception e) {
@@ -58,6 +60,28 @@ public class MysqlRecipeHandler {
         }
 
         return true;
+    }
+
+    public static Recipe getRecipe(int id){
+        ResultSet rs = null;
+        try(Connection conn = MySql.getDataSource().getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(Constants.GET_RECIPE)) {
+            pstmt.setInt(1, id); //id
+            pstmt.setInt(2, 1); //limit
+            rs = pstmt.executeQuery();
+            
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        try{
+            return Recipe.fromResultSet(rs);
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        
+
     }
     
 }

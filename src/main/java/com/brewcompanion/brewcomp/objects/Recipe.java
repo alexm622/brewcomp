@@ -1,6 +1,8 @@
 package com.brewcompanion.brewcomp.objects;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
@@ -42,6 +44,36 @@ public class Recipe implements Serializable{
         this.authorHash = authorHash;
         this.authorID = authorID;
         this.description = description;
+    }
+
+    public static Recipe fromResultSet(ResultSet rs) throws SQLException{
+        int id = rs.getInt("id");
+        String name = rs.getString("name");
+        String hash = rs.getString("hash");
+        String author = rs.getString("author");
+        String authorHash = rs.getString("authorHash");
+        int authorID = rs.getInt("authorID");
+        String description = rs.getString("description");
+        String recipeInstructions = rs.getString("recipeInstructions");
+        String recipeType = rs.getString("recipeType");
+        String parentName = rs.getString("parentName");
+        String parentHash = rs.getString("parentHash");
+        int parentID = rs.getInt("parentID");
+        String parentAuthor = rs.getString("parentAuthor");
+        String parentAutherHash = rs.getString("parentAutherHash");
+        int parentAuthorID = rs.getInt("parentAuthorID");
+
+        Recipe r = new Recipe(name, hash, id, author, authorHash, authorID, description);
+        r.setRecipeInstructions(recipeInstructions);
+        r.setRecipeType(recipeType);
+        r.setParentName(parentName);
+        r.setParentHash(parentHash);
+        r.setParentID(parentID);
+        r.setParentAuthor(parentAuthor);
+        r.setParentAutherHash(parentAutherHash);
+        r.setParentAuthorID(parentAuthorID);
+
+        return r;
     }
         
 

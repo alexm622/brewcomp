@@ -1,16 +1,19 @@
 package com.brewcompanion.brewcomp;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import com.brewcompanion.brewcomp.objects.Recipe;
 import com.brewcompanion.brewcomp.utils.Config;
 import com.brewcompanion.brewcomp.utils.minio.Minio;
 import com.brewcompanion.brewcomp.utils.mysql.DatabaseInitializer;
 import com.brewcompanion.brewcomp.utils.mysql.MySql;
-
+import com.brewcompanion.brewcomp.utils.mysql.MysqlRecipeHandler;
 
 import lombok.Getter;
 
@@ -88,6 +91,16 @@ public class Main {
 			Main.getLogger().error("Failed to initialize Minio.");
 			e.printStackTrace();
 		}
+
+		List<Recipe> recipes = Recipe.getRandomData(12);
+        //try inserting the recipes
+
+		Main.getLogger().info("Inserting recipes...");
+
+        for (Recipe recipe : recipes) {
+            Main.getLogger().info(recipe.getName());
+            MysqlRecipeHandler.insertRecipe(recipe);
+        }
 	}
 
 	private static void shutdown() {
