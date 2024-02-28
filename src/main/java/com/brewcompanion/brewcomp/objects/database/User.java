@@ -1,4 +1,4 @@
-package com.brewcompanion.brewcomp.objects;
+package com.brewcompanion.brewcomp.objects.database;
 
 import lombok.Data;
 

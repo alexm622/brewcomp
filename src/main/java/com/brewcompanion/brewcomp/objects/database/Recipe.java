@@ -1,4 +1,4 @@
-package com.brewcompanion.brewcomp.objects;
+package com.brewcompanion.brewcomp.objects.database;
 
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -27,9 +27,9 @@ public class Recipe implements Serializable{
 
     private String parentName;
     private String parentHash;
-    private  int parentID;
+    private  int parentID = 0;
     private String parentAuthor;
-    private String parentAutherHash;
+    private String parentAuthorHash;
     private int parentAuthorID;
 
     
@@ -70,7 +70,7 @@ public class Recipe implements Serializable{
         r.setParentHash(parentHash);
         r.setParentID(parentID);
         r.setParentAuthor(parentAuthor);
-        r.setParentAutherHash(parentAutherHash);
+        r.setParentAuthorHash(parentAutherHash);
         r.setParentAuthorID(parentAuthorID);
 
         return r;
@@ -89,13 +89,7 @@ public class Recipe implements Serializable{
             "authorHash1",
             1,
             "A rich and chocolatey stout with a smooth finish."
-        );
-        recipe1.setParentName("Stout");
-        recipe1.setParentHash("parentHash1");
-        recipe1.setParentID(1);
-        recipe1.setParentAuthor("Jane Smith");
-        recipe1.setParentAutherHash("parentAuthorHash1");
-        recipe1.setParentAuthorID(1);
+        );       
         recipe1.setRecipeInstructions("1. Boil water\n2. Add malt\n3. Add hops\n4. Ferment\n5. Add cocoa powder\n6. Bottle");
         recipe1.setRecipeType("Stout");
         exampleData.add(recipe1);
@@ -114,7 +108,7 @@ public class Recipe implements Serializable{
         recipe2.setParentHash("parentHash2");
         recipe2.setParentID(1);
         recipe2.setParentAuthor("John Doe");
-        recipe2.setParentAutherHash("parentAuthorHash2");
+        recipe2.setParentAuthorHash("parentAuthorHash2");
         recipe2.setParentAuthorID(1);
         recipe2.setRecipeInstructions("1. Boil water\n2. Add malt\n3. Add hops\n4. Ferment\n5. Bottle");
         recipe2.setRecipeType("IPA");
@@ -134,7 +128,7 @@ public class Recipe implements Serializable{
         recipe3.setParentHash("parentHash3");
         recipe3.setParentID(1);
         recipe3.setParentAuthor("Bob Johnson");
-        recipe3.setParentAutherHash("parentAuthorHash3");
+        recipe3.setParentAuthorHash("parentAuthorHash3");
         recipe3.setParentAuthorID(1);
         recipe3.setRecipeInstructions("1. Boil water\n2. Add malt\n3. Add hops\n4. Ferment\n5. Add dark candi sugar\n6. Bottle");
         recipe3.setRecipeType("Belgian Dubbel");
@@ -170,7 +164,7 @@ public class Recipe implements Serializable{
                 recipe.setParentHash(parentHash);
                 recipe.setParentID(parentID);
                 recipe.setParentAuthor(parentAuthor);
-                recipe.setParentAutherHash(parentAuthorHash);
+                recipe.setParentAuthorHash(parentAuthorHash);
                 recipe.setParentAuthorID(parentAuthorID);
                 recipe.setRecipeInstructions(recipeInstructions);
                 recipe.setRecipeType(recipeType);

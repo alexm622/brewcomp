@@ -8,12 +8,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import com.brewcompanion.brewcomp.objects.Recipe;
+import com.brewcompanion.brewcomp.objects.database.Recipe;
 import com.brewcompanion.brewcomp.utils.Config;
 import com.brewcompanion.brewcomp.utils.minio.Minio;
 import com.brewcompanion.brewcomp.utils.mysql.DatabaseInitializer;
 import com.brewcompanion.brewcomp.utils.mysql.MySql;
-import com.brewcompanion.brewcomp.utils.mysql.MysqlRecipeHandler;
+import com.brewcompanion.brewcomp.utils.mysql.MySqlRecipeHandler;
 
 import lombok.Getter;
 
@@ -47,7 +47,7 @@ public class Main {
 		}
 
 		// read config file
-		logger.info("Reading config file...");
+		logger.info("Reading config file...");	// TODO this will return a json object with the url for the minio presigned url
 		try {
 			config = Config.loadConfigFromFile("./config.json");
 		} catch (Exception e) {
@@ -91,16 +91,6 @@ public class Main {
 			Main.getLogger().error("Failed to initialize Minio.");
 			e.printStackTrace();
 		}
-
-		List<Recipe> recipes = Recipe.getRandomData(12);
-        //try inserting the recipes
-
-		Main.getLogger().info("Inserting recipes...");
-
-        for (Recipe recipe : recipes) {
-            Main.getLogger().info(recipe.getName());
-            MysqlRecipeHandler.insertRecipe(recipe);
-        }
 	}
 
 	private static void shutdown() {

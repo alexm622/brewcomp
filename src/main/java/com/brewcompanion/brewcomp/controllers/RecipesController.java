@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.brewcompanion.brewcomp.Main;
-import com.brewcompanion.brewcomp.objects.Recipe;
-import com.brewcompanion.brewcomp.utils.mysql.MysqlRecipeHandler;
+import com.brewcompanion.brewcomp.objects.database.Recipe;
+import com.brewcompanion.brewcomp.utils.mysql.MySqlRecipeHandler;
 
 @Controller
 @RequestMapping(value = {"/recipes"})
