@@ -14,6 +14,8 @@ public class LoginPostRequest implements Serializable{
     
     String ip;
     String userAgent;
+    String platform;
+    String language;
     String location;
     String device;
     String os;

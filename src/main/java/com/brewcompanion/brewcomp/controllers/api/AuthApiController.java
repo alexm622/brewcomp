@@ -1,4 +1,4 @@
-package com.brewcompanion.brewcomp.controllers.auth;
+package com.brewcompanion.brewcomp.controllers.api;
 
 import java.io.Serializable;
 
@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.brewcompanion.brewcomp.Main;
 import com.brewcompanion.brewcomp.objects.api.auth.LoginPostRequest;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.brewcompanion.brewcomp.objects.api.auth.CreateUserPostRequest;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,15 +21,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping(value = {"/api/auth"})
 public class AuthApiController {
 
-	@PostMapping("/login")
+@PostMapping("/login")
+public ResponseEntity<LoginPostRequest> postLogin(@RequestBody LoginPostRequest entity, HttpServletRequest request) {
+    //get the IP address
+    String ip = request.getRemoteAddr();
+    entity.setIp(ip);
     
-	public ResponseEntity<LoginPostRequest> postLogin(@RequestBody LoginPostRequest entity) {
+    //right now just print the request
+    Main.getLogger().debug(entity.toString());
+    
 
-        //right now just print the request
-        Main.getLogger().info(entity.toString());
-		
-		return ResponseEntity.ok(entity);
-	} 
+    return ResponseEntity.ok(entity);
+} 
 
     @PostMapping("/logout")
     public ResponseEntity<CreateUserPostRequest> postLogout(@RequestBody CreateUserPostRequest entity) {
