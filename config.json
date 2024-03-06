@@ -4,6 +4,22 @@
     "minioUrl": "http://172.20.0.4:9000",
     "mysqlDbName": "brewcomp",
     "mysqlMaxPoolSize": 10,
+
+    "redisHost" : "172.20.0.3",
+    "redisPort" : 6379,
+    "redisDb" : 0,
+    "redisPassword" : "",
+    "redisMaxPoolSize" : 128,
+    "redisMaxIdle" : 128,
+    "redisMinIdle" : 16,
+    "redisTestOnBorrow" : true,
+    "redisTestOnReturn" : true,
+    "redisTestWhileIdle" : true,
+    "redisMinEvictableIdleDuration" : 60,
+    "redisNumTestsPerEvictionRun" : 3,
+    "redisBlockWhenExhausted" : true,
+
+
     "minioQrCodeBucketName": "brewcomp-qrcodes",
     "minioLabelBucketName": "brewcomp-labels",
     "minioQrCodePolicy": "./misc/minio/qrcode-policy.json",

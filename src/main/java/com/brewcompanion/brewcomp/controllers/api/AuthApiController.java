@@ -7,11 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.brewcompanion.brewcomp.Main;
+import com.brewcompanion.brewcomp.mysql.MySqlAuthHandler;
 import com.brewcompanion.brewcomp.objects.api.auth.LoginPostRequest;
+import com.brewcompanion.brewcomp.redis.TokenManager;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import com.brewcompanion.brewcomp.objects.api.auth.CreateUserPostRequest;
+import com.brewcompanion.brewcomp.objects.api.auth.LoginConfirm;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,16 +25,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthApiController {
 
 @PostMapping("/login")
-public ResponseEntity<LoginPostRequest> postLogin(@RequestBody LoginPostRequest entity, HttpServletRequest request) {
+public ResponseEntity<LoginConfirm> postLogin(@RequestBody LoginPostRequest entity, HttpServletRequest request) {
     //get the IP address
     String ip = request.getRemoteAddr();
     entity.setIp(ip);
     
     //right now just print the request
     Main.getLogger().debug(entity.toString());
-    
 
-    return ResponseEntity.ok(entity);
+    //issue a token
+    String token = TokenManager.generateToken(MySqlAuthHandler.getUserId(entity.getUsername()), ip);
+    
+    //create the response
+    LoginConfirm loginConfirm = new LoginConfirm();
+    loginConfirm.setToken(token);
+
+    return ResponseEntity.ok(loginConfirm);
 } 
 
     @PostMapping("/logout")

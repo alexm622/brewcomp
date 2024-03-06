@@ -13,6 +13,7 @@ import com.brewcompanion.brewcomp.mysql.DatabaseInitializer;
 import com.brewcompanion.brewcomp.mysql.MySql;
 import com.brewcompanion.brewcomp.mysql.MySqlRecipeHandler;
 import com.brewcompanion.brewcomp.objects.database.Recipe;
+import com.brewcompanion.brewcomp.redis.Redis;
 import com.brewcompanion.brewcomp.utils.Config;
 
 import lombok.Getter;
@@ -76,12 +77,23 @@ public class Main {
 			DatabaseInitializer.initialize();
 			logger.info("MySql initialized.");
 			
-			// TODO remove this
-			//MySqlDebug.resetAll();
+			
 		} catch (Exception e) {
 			Main.getLogger().error("Failed to initialize MySql.");
 			e.printStackTrace();
 		}
+
+		//intialize redis
+		logger.info("Initializing Redis connection pool");
+		try {
+			Redis.intialize();
+			logger.info("Redis connection pool initialized.");
+
+		} catch (Exception e) {
+			Main.getLogger().error("Failed to initialize Redis connection pool.");
+			e.printStackTrace();
+		}
+
 		// initialize minio
 		logger.info("Initializing Minio...");
 		try {

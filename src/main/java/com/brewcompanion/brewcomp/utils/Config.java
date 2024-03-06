@@ -21,7 +21,21 @@ public class Config {
     private Integer mysqlMaxPoolSize;
 
     //redis specific config
-    // TODO add redis config
+    
+    //redis specific config
+    private String redisHost;
+    private Integer redisPort;
+    private Integer redisDatabase;
+    private String redisPassword;
+    private Integer redisMaxPoolSize;
+    private Integer redisMaxIdle;
+    private Integer redisMinIdle;
+    private Boolean redisTestOnBorrow;
+    private Boolean redisTestOnReturn;
+    private Boolean redisTestWhileIdle;
+    private Integer redisMinEvictableIdleDuration;
+    private Integer redisNumTestsPerEvictionRun;
+    private Boolean redisBlockWhenExhausted;
 
     //minio specific config
     private String minioQrCodeBucketName;
@@ -75,6 +89,21 @@ public class Config {
 
         //redis
         config.setRedisUrl("redis://172.20.0.3:6379");
+        config.setRedisHost("172.20.0.3");
+        config.setRedisPort(6379);
+        config.setRedisDatabase(0);
+        config.setRedisPassword("");
+        config.setRedisMaxPoolSize(128);
+        config.setRedisMaxIdle(128);
+        config.setRedisMinIdle(16);
+        config.setRedisTestOnBorrow(true);
+        config.setRedisTestOnReturn(true);
+        config.setRedisTestWhileIdle(true);
+        config.setRedisMinEvictableIdleDuration(60);
+        config.setRedisNumTestsPerEvictionRun(3);
+        config.setRedisBlockWhenExhausted(true);
+        config.setRedisNumTestsPerEvictionRun(3);
+        config.setRedisBlockWhenExhausted(true);
 
         //minio
         config.setMinioUrl("http://172.20.0.4:9000");
