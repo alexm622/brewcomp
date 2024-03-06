@@ -1,4 +1,4 @@
-package com.brewcompanion.brewcomp.utils.mysql;
+package com.brewcompanion.brewcomp.mysql;
 
 public class Constants {
 

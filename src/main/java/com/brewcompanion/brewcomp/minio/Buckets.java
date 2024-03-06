@@ -1,4 +1,4 @@
-package com.brewcompanion.brewcomp.utils.minio;
+package com.brewcompanion.brewcomp.minio;
 
 import lombok.Getter;
 

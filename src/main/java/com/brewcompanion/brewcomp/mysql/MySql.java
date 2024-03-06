@@ -1,4 +1,4 @@
-package com.brewcompanion.brewcomp.utils.mysql;
+package com.brewcompanion.brewcomp.mysql;
 
 import com.brewcompanion.brewcomp.Main;
 import com.brewcompanion.brewcomp.utils.Secrets;

@@ -1,4 +1,4 @@
-package com.brewcompanion.brewcomp.utils.mysql;
+package com.brewcompanion.brewcomp.mysql;
 
 public enum TableEnum{
     USERS,

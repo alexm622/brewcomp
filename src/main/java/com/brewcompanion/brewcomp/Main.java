@@ -8,12 +8,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import com.brewcompanion.brewcomp.minio.Minio;
+import com.brewcompanion.brewcomp.mysql.DatabaseInitializer;
+import com.brewcompanion.brewcomp.mysql.MySql;
+import com.brewcompanion.brewcomp.mysql.MySqlRecipeHandler;
 import com.brewcompanion.brewcomp.objects.database.Recipe;
 import com.brewcompanion.brewcomp.utils.Config;
-import com.brewcompanion.brewcomp.utils.minio.Minio;
-import com.brewcompanion.brewcomp.utils.mysql.DatabaseInitializer;
-import com.brewcompanion.brewcomp.utils.mysql.MySql;
-import com.brewcompanion.brewcomp.utils.mysql.MySqlRecipeHandler;
 
 import lombok.Getter;
 

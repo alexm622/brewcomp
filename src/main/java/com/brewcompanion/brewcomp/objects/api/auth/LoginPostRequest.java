@@ -12,7 +12,7 @@ public class LoginPostRequest implements Serializable{
 
     //some telemetry
     
-    String ip;
+    String ip; //this will have to be recorded on our end
     String userAgent;
     String platform;
     String language;
