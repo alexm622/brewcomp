@@ -1,7 +1,5 @@
 package com.brewcompanion.brewcomp.controllers.api;
 
-import java.io.Serializable;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

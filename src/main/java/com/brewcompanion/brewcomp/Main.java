@@ -1,7 +1,5 @@
 package com.brewcompanion.brewcomp;
 
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -11,8 +9,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import com.brewcompanion.brewcomp.minio.Minio;
 import com.brewcompanion.brewcomp.mysql.DatabaseInitializer;
 import com.brewcompanion.brewcomp.mysql.MySql;
-import com.brewcompanion.brewcomp.mysql.MySqlRecipeHandler;
-import com.brewcompanion.brewcomp.objects.database.Recipe;
 import com.brewcompanion.brewcomp.redis.Redis;
 import com.brewcompanion.brewcomp.utils.Config;
 
@@ -48,7 +44,7 @@ public class Main {
 		}
 
 		// read config file
-		logger.info("Reading config file...");	// TODO this will return a json object with the url for the minio presigned url
+		logger.info("Reading config file...");	
 		try {
 			config = Config.loadConfigFromFile("./config.json");
 		} catch (Exception e) {
