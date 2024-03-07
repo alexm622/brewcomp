@@ -87,10 +87,32 @@
                 contentType: "application/json",
                 dataType: "json",
                 data: JSON.stringify(data),
-                
+
+                //handle the response
                 success: function (response) {
-                    console.log(response);
+                    //hide the ribbon
+                    document.getElementById("incorrectLoginRibbon").style.display = "none";
+
+                    //add the token to cookies
+
+                    var cookie = "token=" + response.token;
+
+                    //set to expire in 1 week
+                    var date = new Date();
+                    date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
+
+                    cookie += "; expires=" + date.toUTCString();
+
+                    document.cookie = "token=" + cookie;
+
+                    console.log("cookie: " + cookie);;
                 },
+                error: function (response) {
+                    //show the ribbon
+                    document.getElementById("incorrectLoginRibbon").style.display = "block";
+                    //clear the password field
+                    $("#password").val("");
+                }
             });
         }
     </script>
@@ -103,26 +125,29 @@
                     <div class="card-header">
                         <h3 class="text-center">Login</h3>
                     </div>
-                    
+
 
                     <div class="card-body">
                         <div class="alert alert-danger" id="loginRibbon" style="display: none;">
                             <strong>Error!</strong> Please fill in all the fields.
-                            </div>
+                        </div>
+                        <div class="alert alert-danger" id="incorrectLoginRibbon" style="display: none;">
+                            <strong>Error!</strong> Username and/or password are incorrect.
+                        </div>
                         <form onsubmit="sendLogin(event)">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            
-                            <input type="text" class="form-control" id="username" />
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" />
-                        </div>
-                        <br />
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary btn-block w-100">Login</button>
-                        </div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+
+                                <input type="text" class="form-control" id="username" />
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" />
+                            </div>
+                            <br />
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-block w-100">Login</button>
+                            </div>
                         </form>
                     </div>
                 </div>

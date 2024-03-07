@@ -31,6 +31,12 @@ public ResponseEntity<LoginConfirm> postLogin(@RequestBody LoginPostRequest enti
     //right now just print the request
     Main.getLogger().debug(entity.toString());
 
+    //verify the login
+    if (!MySqlAuthHandler.verifyLogin(entity.getUsername(), entity.getPassword())) {
+        return ResponseEntity.status(401).build();
+    }
+
+
     //issue a token
     String token = TokenManager.generateToken(MySqlAuthHandler.getUserId(entity.getUsername()), ip);
     
