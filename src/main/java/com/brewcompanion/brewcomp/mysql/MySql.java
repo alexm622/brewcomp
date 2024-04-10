@@ -29,6 +29,10 @@ public class MySql {
         return dataSource;
     }
 
+    public static void setDataSource(HikariDataSource dataSource) {
+        MySql.dataSource = dataSource;
+    }
+
     public static void shutdown() {
         dataSource.close();
     }

@@ -63,9 +63,11 @@ public class Constants {
                         "hash VARCHAR(255) NOT NULL," +
                         "email VARCHAR(255) NOT NULL," +
                         "salt VARCHAR(255) NOT NULL," +
-                        "PRIMARY KEY (id)" +
-                        "CONSTRAINT unique_username UNIQUE (username)," +
+                        "PRIMARY KEY (id)," +
+                        "CONSTRAINT unique_username UNIQUE (username)" +
                         ");";
+
+                        
 
         // table checks
 

@@ -32,4 +32,8 @@ public class Redis {
     public static Jedis getJedis() {
         return pool.getResource();
     }
+
+    public static void setJedisPool(JedisPool p){
+        pool = p;
+    }
 }

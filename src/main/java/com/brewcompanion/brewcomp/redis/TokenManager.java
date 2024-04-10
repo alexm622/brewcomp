@@ -12,7 +12,7 @@ public class TokenManager {
         Jedis jedis = Redis.getJedis();
         
         //check to see if token is valid
-        if(jedis.hget("UID" + userId +"Token:" + token, "ip").equals(ip)){
+        if(jedis.get("UID" + userId +"Token:" + token).equals(ip)){
             jedis.close();
             return true;
         }
