@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xml:lang>
+
+<head>
+    <th:block th:replace="~{fragments/essentials/header :: header}">
+        <title>My Website</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!--/*JQuery */-->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+        <!--/*PopperJS */-->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+
+        <!--/*Bootstrap */-->
+        <script src=" https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js "></script>
+
+        <!--/*Bootstrap Icons*/-->
+        <link href=" https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.min.css "
+            rel="stylesheet">
+
+        <!--/*Bootswatch */-->
+        <link href=" https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cerulean/bootstrap.min.css " rel="stylesheet">
+
+        <!--/*Backbone.js */-->
+        <script src="https://cdn.jsdelivr.net/npm/backbone@1.5.0/backbone-min.min.js"></script>
+
+        <!--/*Underscore.js */-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js"></script>
+
+
+        <!--/*JQuery UI */-->
+        <script src=" https://cdn.jsdelivr.net/npm/jqueryui@1.11.1/jquery-ui.min.js "></script>
+        <link href=" https://cdn.jsdelivr.net/npm/jqueryui@1.11.1/jquery-ui.min.css " rel="stylesheet">
+    </th:block>
+    <title>My Website</title>
+</head>
+
+<body>
+
+    <th:block th:replace="~{fragments/basic/navbar :: navbar}" />
+
+    <script>
+        function createUser(event) {
+            event.preventDefault();
+            console.log("Sending createUser data");
+
+        }
+
+        function isValidEmail(event){
+            var email = $("#email").val();
+            var validEmail = document.getElementById("validEmail");
+
+            var secondHalf = email.split("@")[1];
+
+            if(secondHalf != undefined && secondHalf.includes(".")){
+                validEmail.style.color = "green";
+                validEmail.hidden = true;
+            }else{
+                validEmail.style.color = "rgb(202, 0, 0)";
+                validEmail.hidden = false;
+            }
+        }
+
+        function checkPasswordComplexity(event) {
+            var password = $("#password").val();
+            var passwordLength = document.getElementById("passwordLength");
+            var uppercase = document.getElementById("uppercase");
+            var lowercase = document.getElementById("lowercase");
+            var number = document.getElementById("number");
+            var special = document.getElementById("special");
+
+            if (password.length >= 8) {
+                passwordLength.style.color = "green";
+            } else {
+                passwordLength.style.color = "rgb(202, 0, 0)";
+            }
+
+            if (password.match(/[A-Z]/)) {
+                uppercase.style.color = "green";
+            } else {
+                uppercase.style.color = "rgb(202, 0, 0)";
+            }
+
+            if (password.match(/[a-z]/)) {
+                lowercase.style.color = "green";
+            } else {
+                lowercase.style.color = "rgb(202, 0, 0)";
+            }
+
+            if (password.match(/[0-9]/)) {
+                number.style.color = "green";
+            } else {
+                number.style.color = "rgb(202, 0, 0)";
+            }
+
+            if (password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/)) {
+                special.style.color = "green";
+            } else {
+                special.style.color = "rgb(202, 0, 0)";
+            }
+        }
+
+        function doPasswordsMatch(event){
+            var password = $("#password").val();
+            var confirmPassword = $("#confirmPassword").val();
+            var passwordsMatch1 = document.getElementById("passwordsMatch1");
+            var passwordsMatch2 = document.getElementById("passwordsMatch2");
+            
+            if(password == confirmPassword){
+                passwordsMatch1.style.color = "green";
+                passwordsMatch1.hidden = true;
+                passwordsMatch2.style.color = "green";
+                passwordsMatch2.hidden = true;
+                return true;
+            }else{
+                passwordsMatch1.style.color = "rgb(202, 0, 0)";
+                passwordsMatch1.hidden = false;
+                passwordsMatch2.style.color = "rgb(202, 0, 0)";
+                passwordsMatch2.hidden = false;
+                return false;
+            }
+        }
+    </script>
+
+    <!--place a square in the middle-->
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Register</h3>
+                    </div>
+
+
+                    <div class="card-body">
+                        <div class="alert alert-danger" id="registerRibbon" style="display: none;">
+                            <strong>Error!</strong> Please fill in all the fields.
+                        </div>
+                        <div class="alert alert-danger" id="userExists" style="display: none;">
+                            <strong>Error!</strong> Username already exists
+                        </div>
+                        <div class="alert alert-danger" id="emailExists" style="display: none;">
+                            <strong>Error!</strong> an account with that email already exists
+                        </div>
+                        <form onsubmit="createUser">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" oninput="isValidEmail(event)" onLoad="isValidEmail(event)" required>
+                                <h6 id="validEmail" style="color:rgb(202, 0, 0)" >please enter a valid email</h6>
+                                
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" oninput="checkPasswordComplexity(event);doPasswordsMatch(event)" required >
+                                <h6 id="passwordsMatch1" style="color:rgb(202, 0, 0)" hidden>passwords must match!</h6>
+                                password must contain:
+                                <ul>
+                                    <li style="color:rgb(202, 0, 0)" id="passwordLength">At least 8 characters</li>
+                                    <li style="color:rgb(202, 0, 0)" id="uppercase">At least one uppercase letter</li>
+                                    <li style="color:rgb(202, 0, 0)" id="lowercase">At least one lowercase letter</li>
+                                    <li style="color:rgb(202, 0, 0)" id="number">At least one number</li>
+                                    <li style="color:rgb(202, 0, 0)" id="special">At least one special character</li>
+                                </ul>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required oninput="doPasswordsMatch(event)">
+                                <h6 id="passwordsMatch2" style="color:rgb(202, 0, 0)" hidden>passwords must match!</h6>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </form>
+                        <table style="width: 100%;">
+                            <th></th>
+                            <tr>
+                                <td style="text-align: left;">
+                                    <a href="/login">Already have an account?</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

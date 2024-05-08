@@ -21,8 +21,8 @@ public class AuthController {
 	}
 
 	@GetMapping("/register")
-	public String getRegister(@RequestParam String param) {
-		return new String();
+	public String getRegister() {
+		return "auth/register";
 	}
 	
 
