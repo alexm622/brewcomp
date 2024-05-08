@@ -94,7 +94,7 @@ public class Constants {
         public final static String GET_USER_ID = "SELECT id FROM Users WHERE username = ?;";
 
         //username in use
-        public final static String USERNAME_IN_USE = "SELECT username FROM Users WHERE username = ?;";
+        public final static String USERNAME_IN_USE = "SELECT username FROM Users WHERE username = ? LIMIT 1;";
 
         //get the password salt
         public final static String GET_SALT = "SELECT salt FROM Users WHERE username = ?;";

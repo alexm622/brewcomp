@@ -1,8 +1,9 @@
-package com.brewcompanion.brewcomp.redis;
+package com.brewcompanion.brewcomp.auth;
 
 import org.springframework.data.redis.core.script.DigestUtils;
 
 import com.brewcompanion.brewcomp.Main;
+import com.brewcompanion.brewcomp.redis.Redis;
 
 import redis.clients.jedis.Jedis;
 
@@ -34,5 +35,14 @@ public class TokenManager {
 
         return token;
 
+    }
+
+    public static boolean deleteToken(String token, int userId){
+        Jedis jedis = Redis.getJedis();
+        jedis.del("UID" + userId + "Token:" + token);
+
+        Main.getLogger().info(String.format("deleted token: %s for user %d", token, userId));
+        jedis.close();
+        return true;
     }
 }

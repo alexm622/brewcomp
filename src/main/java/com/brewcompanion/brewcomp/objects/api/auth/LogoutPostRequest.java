@@ -8,7 +8,9 @@ import lombok.Data;
 public class LogoutPostRequest implements Serializable{
     //logout stuff
 
+    // TODO this should be fixed you can't logout a different user without auth
     String sessionToken;
+    String username;
 
     //some telemetry
     String ip;

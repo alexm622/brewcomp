@@ -5,15 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.brewcompanion.brewcomp.Main;
-import com.brewcompanion.brewcomp.mysql.MySqlAuthHandler;
+import com.brewcompanion.brewcomp.auth.TokenManager;
+import com.brewcompanion.brewcomp.mysql.auth.MySqlAuthHandler;
 import com.brewcompanion.brewcomp.objects.api.auth.LoginPostRequest;
-import com.brewcompanion.brewcomp.redis.TokenManager;
+import com.brewcompanion.brewcomp.objects.api.auth.LogoutPostRequest;
+import com.brewcompanion.brewcomp.objects.api.auth.UpdateUserPostRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import com.brewcompanion.brewcomp.objects.api.auth.CreateUserPostRequest;
 import com.brewcompanion.brewcomp.objects.api.auth.LoginConfirm;
 
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -48,27 +51,37 @@ public ResponseEntity<LoginConfirm> postLogin(@RequestBody LoginPostRequest enti
 } 
 
     @PostMapping("/logout")
-    public ResponseEntity<CreateUserPostRequest> postLogout(@RequestBody CreateUserPostRequest entity) {
-
+    public ResponseEntity<Boolean> postLogout(@RequestBody LogoutPostRequest entity, @CookieValue(value = "token") String token) {
         //right now just print the request
         Main.getLogger().info(entity.toString());
+
         
-        return ResponseEntity.ok(entity);
+        //delete the token
+        TokenManager.deleteToken(token, MySqlAuthHandler.getUserId(entity.getUsername()));
+        
+        return ResponseEntity.ok(true);
         
     }
 
     @PostMapping("/createuser")
-    public String postCreateUser(@RequestBody String entity) {
-        //TODO: process POST request
+    public ResponseEntity<Boolean> postCreateUser(@RequestBody CreateUserPostRequest entity) {
+
+        boolean exists = MySqlAuthHandler.doesUsernameExist(entity.getUsername());
+
+        if (exists) {
+            return ResponseEntity.status(409).build();
+        }
         
-        return entity;
+        MySqlAuthHandler.insertUser(entity.getUsername(), entity.getEmail(), entity.getPassword());
+
+        return ResponseEntity.ok(true);
     }
 
     @PostMapping("/updateuser")
-    public String postUpdateUser(@RequestBody String entity) {
-        //TODO: process POST request
+    public ResponseEntity<Boolean> postUpdateUser(@RequestBody UpdateUserPostRequest entity) {
         
-        return entity;
+        
+        return ResponseEntity.ok(true);
     }
     
     

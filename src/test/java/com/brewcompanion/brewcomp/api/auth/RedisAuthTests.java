@@ -9,8 +9,8 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.brewcompanion.brewcomp.Main;
+import com.brewcompanion.brewcomp.auth.TokenManager;
 import com.brewcompanion.brewcomp.redis.Redis;
-import com.brewcompanion.brewcomp.redis.TokenManager;
 import com.redis.testcontainers.RedisContainer;
 
 import java.time.Duration;

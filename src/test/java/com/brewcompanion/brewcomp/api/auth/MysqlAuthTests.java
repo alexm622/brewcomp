@@ -11,7 +11,7 @@ import org.testcontainers.containers.MySQLContainer;
 import com.brewcompanion.brewcomp.mysql.Constants;
 import com.brewcompanion.brewcomp.mysql.DatabaseInitializer;
 import com.brewcompanion.brewcomp.mysql.MySql;
-import com.brewcompanion.brewcomp.mysql.MySqlAuthHandler;
+import com.brewcompanion.brewcomp.mysql.auth.MySqlAuthHandler;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 

@@ -1,4 +1,4 @@
-package com.brewcompanion.brewcomp.mysql;
+package com.brewcompanion.brewcomp.mysql.auth;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.DigestUtils;
 
 import com.brewcompanion.brewcomp.Main;
+import com.brewcompanion.brewcomp.mysql.Constants;
+import com.brewcompanion.brewcomp.mysql.MySql;
 
 public class MySqlAuthHandler {
     public static boolean verifyLogin(String username, String password) {
@@ -54,6 +56,11 @@ public class MySqlAuthHandler {
         return 0;
     }
 
+    /**
+     * Check to see if given username exists
+     * @param username
+     * @return true if username exists
+     */
     public static boolean doesUsernameExist(String username) {
         try (Connection conn = MySql.getDataSource().getConnection()) {
             try (PreparedStatement pstmt = conn.prepareStatement(Constants.USERNAME_IN_USE)) {
@@ -72,6 +79,11 @@ public class MySqlAuthHandler {
         return false;
     }
 
+    /**
+     * Get a username given id
+     * @param id uid
+     * @return the username
+     */
     public static String getUsername(int id) {
         try (Connection conn = MySql.getDataSource().getConnection()) {
             try (PreparedStatement pstmt = conn.prepareStatement(Constants.GET_USERNAME)) {
@@ -90,6 +102,14 @@ public class MySqlAuthHandler {
         return null;
     }
 
+    
+    /**
+     * insert the user into the database
+     * @param username
+     * @param email
+     * @param password
+     * @return
+     */
     public static boolean insertUser(String username, String email, String password) {
         // insert user into database
         try (Connection conn = MySql.getDataSource().getConnection();) {
@@ -122,5 +142,7 @@ public class MySqlAuthHandler {
 
         return true;
     }
+
+    
 
 }

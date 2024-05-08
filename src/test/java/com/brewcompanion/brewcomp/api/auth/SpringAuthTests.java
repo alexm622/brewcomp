@@ -7,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.brewcompanion.brewcomp.controllers.api.AuthApiController;
@@ -16,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @WebMvcTest(AuthApiController.class)
-public class SpringAuthTests {
+class SpringAuthTests {
 
     @Autowired MockMvc mockMvc;
 
